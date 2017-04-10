@@ -1,6 +1,10 @@
 "use strict"
 
 const world = SVG("worldmap")
+const zoomInButton = document.querySelector(".info-box__button_in")
+const zoomOutButton = document.querySelector(".info-box__button_out")
+
+
 
 /*setupScroll()
 
