@@ -1,9 +1,10 @@
 "use strict"
 
 const world = SVG("worldmap")
-const page = onoff(document)
-const zoomInButton = document.querySelector(".info-box__button_in")
-const zoomOutButton = document.querySelector(".info-box__button_out")
+const page = onoff(document.querySelector(".map-area"))
+const zoomInButton = onoff(document.querySelector(".info-box__button_in"))
+const zoomOutButton = onoff(document.querySelector(".info-box__button_out"))
+const originaleViewbox = world.viewbox()
 
 function onoff(element) {
 	return {
@@ -17,27 +18,87 @@ function onoff(element) {
 		}
 	}
 }
+const zoomIn = zoomHandler(.7)
+const zoomOut = zoomHandler(1.3)
+zoomInButton.on("click", zoomIn)
+zoomOutButton.on("click", zoomOut)
+
+function zoomHandler(level) {
+	return event => {
+		console.log(event.pageX)
+		zoom(world, level).execute()
+	}
+}
+
+function zoom(world, level) {
+	const viewbox = world.viewbox(),
+				width = viewbox.width * level,
+				height = viewbox.height * level
+
+	const x = viewbox.x - (width - viewbox.width) / 2
+	const y = viewbox.y - (height - viewbox.height) / 2
+/*
+	const x = viewbox.x * level
+	const y = viewbox.y * level*/
+
+	const newViewbox = { x, y, width, height }
+	console.log(newViewbox)
+	console.log("zoom factor:", originaleViewbox.width / newViewbox.width)
+	let	delta = world.data("delta") || { x:0, y:0 }
+	delta.x = delta.x * originaleViewbox.width / newViewbox.width
+	delta.y = delta.y * originaleViewbox.height / newViewbox.height
+	world.data("delta", delta)
+	console.log(delta)
+
+	return {
+		execute: () => {
+	//		world.data("newViewbox", newViewbox)
+			world.animate(250, "<>").viewbox( x, y, width, height )
+		}
+	}
+}
+
+function removeZoomHandler() {
+	zoomInButton.off("click", zoomIn)
+	zoomOutButton.off("click", zoomOut)
+}
 
 page.on("mousedown", panHandler)
 
 function panHandler(event) {
+	let	delta = world.data("delta") || { x:0, y:0 }
+
+	const startX = event.pageX - delta.x,
+				startY = event.pageY - delta.y
+
+	console.log(event.pageX, delta.x, startX)
+
 	page.on("mousemove", doPan)
 	page.on("mouseup", removePan)
 
-	world.style("cursor", "move")		
+	world.addClass("dragging")
 
 	function doPan(event) {
 		const view = world.viewbox()
-		console.log("event", event.pageX, event.pageY)
-		console.log("calc", event.pageX - view.width, event.pageY - view.height)
-		//console.log(world.viewbox())
-		pan(world, event.pageX - view.width, event.pageY - view.height).execute()
+		
+
+		delta = {
+			x: event.pageX - startX,
+			y: event.pageY - startY
+		}
+	console.log(event.pageX, delta.x, startX)
+		
+
+		pan(world, delta.x, delta.y).execute()
 	}
 
 	function removePan() {
+		world.data("delta", delta)
+
 		page.off("mousemove", doPan)
 		page.off("mouseup", removePan)
-		world.style("cursor", "auto")
+
+		world.removeClass("dragging")
 	}
 }
 
@@ -53,6 +114,7 @@ function pan(world, x, y) {
 		}
 	}
 }
+
 
 /*const commands = new Map(
 	commandFactory(
