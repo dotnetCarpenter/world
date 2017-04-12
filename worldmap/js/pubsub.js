@@ -1,22 +1,22 @@
 "use strict"
 
-function pubSub(element) {
+function pubSub(publisher) {
 	const listeners = []
 
 	return {
 		on: (type, f) => {
 			listeners.push([type, f])
-			return element
+			return publisher
 		},
 		off: (type, f) => {
 			listeners = listeners.filter(l => l[0] !== type && l[1] !== f)
-			return element
+			return publisher
 		},
 		fire: (type, ...args) => {
 			listeners.forEach(l => {
 				l[0] === type && l[1].apply(null, args)
 			})
-			return element
+			return publisher
 		}
 	}
 }

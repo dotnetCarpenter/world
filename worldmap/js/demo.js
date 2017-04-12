@@ -4,6 +4,7 @@ const world = SVG("worldmap")
 const page = onoff(document.querySelector(".map-area"))
 const zoomInButton = onoff(document.querySelector(".info-box__button_in"))
 const zoomOutButton = onoff(document.querySelector(".info-box__button_out"))
+const zoomFactorOutput = document.querySelector(".info-box__zoom-factor")
 const originaleViewbox = world.viewbox()
 
 function onoff(element) {
@@ -18,6 +19,13 @@ function onoff(element) {
 		}
 	}
 }
+
+const coordinatePoint = world.node.createSVGPoint()
+
+Object.assign(zoom, pubSub(zoom))
+
+zoom.on("zoom", zoomFactor => { zoomFactorOutput.textContent = zoomFactor.toFixed(3) })
+
 const zoomIn = zoomHandler(.7)
 const zoomOut = zoomHandler(1.3)
 zoomInButton.on("click", zoomIn)
@@ -37,18 +45,20 @@ function zoom(world, level) {
 
 	const x = viewbox.x - (width - viewbox.width) / 2
 	const y = viewbox.y - (height - viewbox.height) / 2
-/*
-	const x = viewbox.x * level
-	const y = viewbox.y * level*/
 
-	const newViewbox = { x, y, width, height }
-	console.log(newViewbox)
-	console.log("zoom factor:", originaleViewbox.width / newViewbox.width)
-	let	delta = world.data("delta") || { x:0, y:0 }
-	delta.x = delta.x * originaleViewbox.width / newViewbox.width
-	delta.y = delta.y * originaleViewbox.height / newViewbox.height
+	const zoomFactor = originaleViewbox.width / width
+	/*const x = viewbox.x * zoomFactor
+	const y = viewbox.y * zoomFactor*/
+
+	//console.log(newViewbox)
+
+	zoom.fire("zoom", zoomFactor)
+
+/*	const	delta = world.data("delta") || { x:0, y:0 }
+	delta.x = delta.x * zoomFactor
+	delta.y = delta.y * zoomFactor
 	world.data("delta", delta)
-	console.log(delta)
+	console.log(delta)*/
 
 	return {
 		execute: () => {
@@ -68,10 +78,19 @@ page.on("mousedown", panHandler)
 function panHandler(event) {
 	let	delta = world.data("delta") || { x:0, y:0 }
 
-	const startX = event.pageX - delta.x,
-				startY = event.pageY - delta.y
+	const matrix = world.node.getScreenCTM().inverse()
+	const transform = transformPoint(matrix)
 
-	console.log(event.pageX, delta.x, startX)
+	//const start = transform(event.pageX, event.pageY]).map((xy => transform(xy[0], xy[1])))
+	//delta = ([event.pageX, event.pageY]).map((xy => transform(xy[0], xy[1])))
+
+	let startX, startY
+	[startX, startY] = transform(event.clientX - delta.x, event.clientY - delta.y)
+
+	console.log("matrix", matrix)
+	console.log("event.clientX", event.clientX)
+	console.log("delta.x", delta.x)
+	console.log("startX", startX)
 
 	page.on("mousemove", doPan)
 	page.on("mouseup", removePan)
@@ -80,14 +99,21 @@ function panHandler(event) {
 
 	function doPan(event) {
 		const view = world.viewbox()
+
+		coordinatePoint.x = event.clientX
+		coordinatePoint.y = event.clientY
+		let client = coordinatePoint.matrixTransform(matrix)
 		
+		coordinatePoint.x = startX
+		coordinatePoint.y = startY
+		let start = coordinatePoint.matrixTransform(matrix)
 
 		delta = {
-			x: event.pageX - startX,
-			y: event.pageY - startY
+			x: client.x - startX,//event.clientX - startX,
+			y: client.y - startY,//event.clientY - startY
 		}
-	console.log(event.pageX, delta.x, startX)
-		
+
+	//console.log(event.pageX, delta.x, startX)
 
 		pan(world, delta.x, delta.y).execute()
 	}
@@ -112,6 +138,16 @@ function pan(world, x, y) {
 			const viewbox = world.viewbox()
 			world.viewbox( -x, -y, viewbox.width, viewbox.height )
 		}
+	}
+}
+
+function transformPoint(matrix) {
+	return (x, y) => {
+		coordinatePoint.x = x
+		coordinatePoint.y = y
+
+		const transformation = coordinatePoint.matrixTransform(matrix)
+		return [transformation.x, transformation.y]
 	}
 }
 
