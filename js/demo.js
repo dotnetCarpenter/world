@@ -83,7 +83,7 @@ function panHandler(event) {
 	
 	// create an SVGPoint with the matrixTransform method
 	// let svgPoint = world.node.createSVGPoint()
-	const matrix = world.node.getCTM()
+	const matrix = world.node.getScreenCTM()
 
 	svgPoint.x = event.clientX
 	svgPoint.y = event.clientY
@@ -123,7 +123,7 @@ function panHandler(event) {
 		//circle.move(delta.x - 5, delta.y - 5)
 		const delta = { x: mouse.x - start.x, y: mouse.y - start.y }
 
-		if(first) console.debug(delta), first = false
+		// if(first) console.debug(delta), first = false
 
 		//if(lastFrame) cancelAnimationFrame(lastFrame), lastFrame = null
 		//lastFrame = requestAnimationFrame(() => { circle.move(delta.x - 5, delta.y - 5) })
