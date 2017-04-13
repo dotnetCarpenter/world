@@ -6,9 +6,8 @@ const zoomInButton = onoff(document.querySelector(".info-box__button_in"))
 const zoomOutButton = onoff(document.querySelector(".info-box__button_out"))
 const zoomFactorOutput = document.querySelector(".info-box__zoom-factor")
 const originaleViewbox = world.viewbox()
-
-// create an SVGPoint with the matrixTransform method
 const svgPoint = world.node.createSVGPoint()
+
 
 
 function onoff(element) {
@@ -64,31 +63,39 @@ function removeZoomHandler() {
 }
 
 page.on("mousedown", panHandler)
-zoom.on("zoom", zoomFactor => {
+/*zoom.on("zoom", zoomFactor => {
 	const delta = world.data("delta")
 	console.debug(delta)
 	world.data("delta", { x: delta.x * zoomFactor, y: delta.y * zoomFactor })
 	console.debug(world.data("delta"))
 
 	//world.data("delta", null)
-	/*const delta = world.data("delta")
-	if(!delta) return
-	const matrix = world.node.getScreenCTM()
-	svgPoint.x = delta.x
-	svgPoint.y = delta.y
-	console.log(svgPoint.matrixTransform(matrix.inverse()))*/
+	// const delta = world.data("delta")
+	// if(!delta) return
+	// const matrix = world.node.getScreenCTM()
+	// svgPoint.x = delta.x
+	// svgPoint.y = delta.y
+	// console.log(svgPoint.matrixTransform(matrix.inverse()))
 	//world.data("delta",  )
-})
+})*/
 function panHandler(event) {
-	let delta = world.data("delta") || { x:0, y:0 }
-	const matrix = world.node.getScreenCTM()
+	//let delta = world.viewbox()//world.data("delta") || { x:0, y:0 }
+	
+	// create an SVGPoint with the matrixTransform method
+	// let svgPoint = world.node.createSVGPoint()
+	const matrix = world.node.getCTM()
 
 	svgPoint.x = event.clientX
 	svgPoint.y = event.clientY
 
 	const start = svgPoint.matrixTransform(matrix.inverse())
-	start.x -= delta.x
-	start.y -= delta.y
+	// const start = world.point(event.clientX, event.clientY)
+	
+	//console.debug(start, world.viewbox())
+	
+	const delta = world.viewbox()
+	start.x -= -delta.x
+	start.y -= -delta.y
 
 	//console.log(delta)
 
@@ -98,27 +105,31 @@ function panHandler(event) {
 	page.on("mouseup", removePan)
 
 	let lastFrame
-
-	function doPan(event) {
+	let first = true
+	
+	function doPan(event) {		
 		world.addClass("dragging")
 		
-		//svgPoint = 	world.node.createSVGPoint()
-		//matrix = world.node.getScreenCTM()
+		// let svgPoint = world.node.createSVGPoint()
+		// let matrix = world.node.getScreenCTM()
 		//console.log(matrix)
 		svgPoint.x = event.clientX
 		svgPoint.y = event.clientY
 
 		const mouse = svgPoint.matrixTransform(matrix.inverse())
-		//circle.move(delta.x - 5, delta.y - 5)
 
-		delta.x = mouse.x - start.x
-		delta.y = mouse.y - start.y
+		//const mouse = world.point(event.clientX, event.clientY)
+		
+		//circle.move(delta.x - 5, delta.y - 5)
+		const delta = { x: mouse.x - start.x, y: mouse.y - start.y }
+
+		if(first) console.debug(delta), first = false
 
 		//if(lastFrame) cancelAnimationFrame(lastFrame), lastFrame = null
 		//lastFrame = requestAnimationFrame(() => { circle.move(delta.x - 5, delta.y - 5) })
 
 		//console.log(delta)
-		world.circle(10).move(delta.x - 5, delta.y - 5)
+		//world.circle(10).move(delta.x - 5, delta.y - 5)
 
 		if(lastFrame) cancelAnimationFrame(lastFrame), lastFrame = null
 		lastFrame = requestAnimationFrame(pan(world, delta).execute)
@@ -131,8 +142,9 @@ function panHandler(event) {
 
 		world.removeClass("dragging")
 
+		//console.debug(delta)
 		//circle.remove()
-		world.data("delta", delta)
+		//world.data("delta", delta)
 	}
 }
 
