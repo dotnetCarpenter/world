@@ -7,6 +7,10 @@ const zoomOutButton = onoff(document.querySelector(".info-box__button_out"))
 const zoomFactorOutput = document.querySelector(".info-box__zoom-factor")
 const originaleViewbox = world.viewbox()
 
+// create an SVGPoint with the matrixTransform method
+const svgPoint = world.node.createSVGPoint()
+
+
 function onoff(element) {
 	return {
 		on: (type, f) => {
@@ -24,6 +28,15 @@ Object.assign(zoom, pubSub(zoom))
 
 zoom.on("zoom", zoomFactor => { zoomFactorOutput.textContent = zoomFactor.toFixed(3) })
 zoom.on("zoom", (z1, z2) => { console.log("zoom", z1, z2) })
+zoom.on("zoom", zoomFactor => {
+	const delta = world.data("delta")
+	if(!delta) return
+	const matrix = world.node.getScreenCTM()
+	svgPoint.x = delta.x
+	svgPoint.y = delta.y
+	console.log(svgPoint.matrixTransform(matrix.inverse()))
+	//world.data("delta",  )
+})
 
 const zoomIn = zoomHandler(.7)
 const zoomOut = zoomHandler(1.3)
@@ -61,15 +74,17 @@ function removeZoomHandler() {
 page.on("mousedown", panHandler)
 
 function panHandler(event) {
-	//let delta = world.data("delta") || { x:0, y:0 }
+	let delta = world.data("delta") || { x:0, y:0 }
+	const matrix = world.node.getScreenCTM()
 
-	let referencePoint = 	world.node.createSVGPoint()
-	let matrix = world.node.getScreenCTM()
+	svgPoint.x = event.clientX
+	svgPoint.y = event.clientY
 
-	referencePoint.x = event.clientX
-	referencePoint.y = event.clientY
+	const start = svgPoint.matrixTransform(matrix.inverse())
+	start.x -= delta.x
+	start.y -= delta.y
 
-	const start = referencePoint.matrixTransform(matrix.inverse())
+	console.log(delta)
 
 	//const circle = world.circle(10).move(start.x -5, start.y - 5)
 
@@ -79,17 +94,19 @@ function panHandler(event) {
 	let lastFrame
 
 	function doPan(event) {
-		//referencePoint = 	world.node.createSVGPoint()
-		matrix = world.node.getScreenCTM()
+		world.addClass("dragging")
+		
+		//svgPoint = 	world.node.createSVGPoint()
+		//matrix = world.node.getScreenCTM()
 		//console.log(matrix)
-		referencePoint.x = event.clientX
-		referencePoint.y = event.clientY
+		svgPoint.x = event.clientX
+		svgPoint.y = event.clientY
 
-		let delta = referencePoint.matrixTransform(matrix.inverse())
+		const mouse = svgPoint.matrixTransform(matrix.inverse())
 		//circle.move(delta.x - 5, delta.y - 5)
 
-		delta.x -= start.x
-		delta.y -= start.y
+		delta.x = mouse.x - start.x
+		delta.y = mouse.y - start.y
 
 		//if(lastFrame) cancelAnimationFrame(lastFrame), lastFrame = null
 		//lastFrame = requestAnimationFrame(() => { circle.move(delta.x - 5, delta.y - 5) })
@@ -108,7 +125,7 @@ function panHandler(event) {
 		world.removeClass("dragging")
 
 		//circle.remove()
-		//world.data("delta", delta)
+		world.data("delta", delta)
 	}
 }
 
@@ -124,13 +141,13 @@ function pan(world, {x,y}) {
 
 /*
 function transformPoint(matrix) {
-	const referencePoint = world.node.createSVGPoint()
+	const svgPoint = world.node.createSVGPoint()
 
 	return (x, y) => {
-		referencePoint.x = x
-		referencePoint.y = y
+		svgPoint.x = x
+		svgPoint.y = y
 
-		const transformation = referencePoint.matrixTransform(matrix)
+		const transformation = svgPoint.matrixTransform(matrix)
 		return [transformation.x, transformation.y]
 	}
 }
