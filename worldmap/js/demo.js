@@ -28,15 +28,7 @@ Object.assign(zoom, pubSub(zoom))
 
 zoom.on("zoom", zoomFactor => { zoomFactorOutput.textContent = zoomFactor.toFixed(3) })
 zoom.on("zoom", (z1, z2) => { console.log("zoom", z1, z2) })
-zoom.on("zoom", zoomFactor => {
-	const delta = world.data("delta")
-	if(!delta) return
-	const matrix = world.node.getScreenCTM()
-	svgPoint.x = delta.x
-	svgPoint.y = delta.y
-	console.log(svgPoint.matrixTransform(matrix.inverse()))
-	//world.data("delta",  )
-})
+
 
 const zoomIn = zoomHandler(.7)
 const zoomOut = zoomHandler(1.3)
@@ -72,7 +64,21 @@ function removeZoomHandler() {
 }
 
 page.on("mousedown", panHandler)
+zoom.on("zoom", zoomFactor => {
+	const delta = world.data("delta")
+	console.debug(delta)
+	world.data("delta", { x: delta.x * zoomFactor, y: delta.y * zoomFactor })
+	console.debug(world.data("delta"))
 
+	//world.data("delta", null)
+	/*const delta = world.data("delta")
+	if(!delta) return
+	const matrix = world.node.getScreenCTM()
+	svgPoint.x = delta.x
+	svgPoint.y = delta.y
+	console.log(svgPoint.matrixTransform(matrix.inverse()))*/
+	//world.data("delta",  )
+})
 function panHandler(event) {
 	let delta = world.data("delta") || { x:0, y:0 }
 	const matrix = world.node.getScreenCTM()
@@ -84,7 +90,7 @@ function panHandler(event) {
 	start.x -= delta.x
 	start.y -= delta.y
 
-	console.log(delta)
+	//console.log(delta)
 
 	//const circle = world.circle(10).move(start.x -5, start.y - 5)
 
@@ -111,7 +117,8 @@ function panHandler(event) {
 		//if(lastFrame) cancelAnimationFrame(lastFrame), lastFrame = null
 		//lastFrame = requestAnimationFrame(() => { circle.move(delta.x - 5, delta.y - 5) })
 
-		console.log(delta)
+		//console.log(delta)
+		world.circle(10).move(delta.x - 5, delta.y - 5)
 
 		if(lastFrame) cancelAnimationFrame(lastFrame), lastFrame = null
 		lastFrame = requestAnimationFrame(pan(world, delta).execute)
