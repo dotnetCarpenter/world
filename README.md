@@ -1,6 +1,13 @@
 # world
 world map
 
+https://it-kollektivet.github.io/world/
+https://it-kollektivet.github.io/world/high.html
+
+## Inspiration
+
+https://github.com/ariutta/svg-pan-zoom/tree/master/src
+
 
 ## License
 
