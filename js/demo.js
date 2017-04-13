@@ -103,6 +103,10 @@ function panHandler(event) {
 
 	page.on("mousemove", doPan)
 	page.on("mouseup", removePan)
+	page.on("mouseleave", function mleave() {
+		removePan()
+		page.off("mouseleave", mleave)
+	})
 
 	let lastFrame
 	let first = true
@@ -136,7 +140,7 @@ function panHandler(event) {
 
 		//pan(world, delta).execute()
 	}
-	function removePan(event) {
+	function removePan() {
 		page.off("mousemove", doPan)
 		page.off("mouseup", removePan)
 
