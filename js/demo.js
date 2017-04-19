@@ -79,6 +79,7 @@ page.on("mousedown", panHandler)
 	//world.data("delta",  )
 })*/
 function panHandler(event) {
+	event.preventDefault()
 	//let delta = world.viewbox()//world.data("delta") || { x:0, y:0 }
 	
 	// create an SVGPoint with the matrixTransform method
@@ -112,6 +113,8 @@ function panHandler(event) {
 	let first = true
 	
 	function doPan(event) {		
+		event.preventDefault()
+
 		world.addClass("dragging")
 		
 		// let svgPoint = world.node.createSVGPoint()
