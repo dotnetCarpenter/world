@@ -20,17 +20,13 @@
 		})
 
 		SVG.on(controls[0], "click", function() {
-			var size = world.node.getBoundingClientRect()
-			var p = world.point(size.width / 2,
-													size.height/ 2)
+			var p = getCenterPoint(world)
 
 			world.zoom(0.6, p, { duration: 250, easing: "<>" })
 		})
 
 		SVG.on(controls[1], "click", function() {
-			var size = world.node.getBoundingClientRect()
-			var p = world.point(size.width / 2,
-													size.height/ 2)
+			var p = getCenterPoint(world)
 
 			world.zoom(1.4, p, { duration: 200, easing: "<>" })
 		})
@@ -45,6 +41,12 @@
 		return function(level) {
 			out.textContent = level.toFixed(2)
 		}
+	}
+
+	function getCenterPoint(element) {
+		var size = world.node.getBoundingClientRect()
+		return world.point(size.width / 2,
+												size.height/ 2)
 	}
 
 }(window, document))

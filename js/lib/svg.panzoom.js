@@ -54,11 +54,11 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     var pinchZoomStop = function(ev) {
       ev.preventDefault()
       zoomInProgress = false
-      
+
       SVG.off(document,'touchmove', pinchZoom)
       SVG.off(document,'touchend', pinchZoomStop)
       this.on('touchstart', pinchZoomStart)
-      
+
       if(ev.touches.length > 0) panStart.call(this, ev)
     }
 
