@@ -22,13 +22,13 @@
 		SVG.on(controls[0], "click", function() {
 			var p = getCenterPoint(world)
 
-			world.zoom(0.6, p, { duration: 250, easing: "<>" })
+			world.zoom(0.5, p, { duration: 250, easing: "<>" })
 		})
 
 		SVG.on(controls[1], "click", function() {
 			var p = getCenterPoint(world)
 
-			world.zoom(1.4, p, { duration: 200, easing: "<>" })
+			world.zoom(1.5, p, { duration: 200, easing: "<>" })
 		})
 	}
 
