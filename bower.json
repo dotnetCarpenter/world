@@ -16,7 +16,6 @@
     "tests"
   ],
   "dependencies": {
-    "svg.js": "^2.6.0",
     "svg.panzoom.js": "/home/dotnet/projects/opensource/svg.panzoom.js/#^0.0.2"
   }
 }
