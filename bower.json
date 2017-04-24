@@ -1,0 +1,21 @@
+{
+  "name": "worldmap",
+  "homepage": "https://github.com/IT-Kollektivet/world",
+  "authors": [
+    "dotnetCarpenter <jon.ronnenberg@gmail.com>"
+  ],
+  "description": "",
+  "main": "index.html",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "svg.panzoom.js": "https://github.com/svgdotjs/svg.panzoom.js.git#^0.0.1"
+  }
+}
