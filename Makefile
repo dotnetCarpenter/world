@@ -1,20 +1,36 @@
-define readDeps
-$(shell node -p "Object.$1(require('./bower.json').dependencies).join(' ')")
-endef
-
 define findDep
-$(shell node -p '"$(shell bower list --paths)".match(/(bower_components[\w/\.]+)/g, "").join(" ")')
+$(shell node -p 'try{"$(shell bower list --paths)".match(/(bower_components[\w/\.]+)/g, "").join(" ")}catch(e){""}')
 endef
 
 
-DEPS_SOURCE := $(call readDeps,values)
-DEPS_NAMES := $(call readDeps,keys)
+ifeq ($(strip $(call findDep)),)
+bower install --production
+endif
 
-.phony: write
+SOURCE := $(call findDep)
+BOWER_FILES := $(notdir ${SOURCE})
+BOWER_DIRS := $(dir ${SOURCE})
+TARGET_FOLDER = js/lib
+TARGETS := $(addprefix ${TARGET_FOLDER}/, ${BOWER_FILES})
+#vpath %.js ${BOWER_DIRS}
 
-write:
-#	@echo ${DEPS_SOURCE}
-	@echo ${DEPS_NAMES}
-	@echo $(call findDep)
+
+all: ${TARGETS}
+
+${TARGET_FOLDER}/%.js: %.js | ${TARGET_FOLDER}
+	cp -p $< $@
+
+${TARGET_FOLDER}:
+	mkdir -p $@
 
 
+.phony: debug
+
+debug:
+	@echo ${SOURCE}
+	@echo ${BOWER_FILES}
+	@echo ${BOWER_DIRS}
+
+
+#cp -vf $< $@
+#@echo $@ $% $< $? $^ $+ $| "\n******************"

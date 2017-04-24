@@ -38,3 +38,7 @@ jspm_packages
 
 # Bower components (third party client-side assets/code)
 bower_components
+js/lib/
+
+# nano text editor tmp files
+.*.swp
