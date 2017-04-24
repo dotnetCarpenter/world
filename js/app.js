@@ -33,8 +33,8 @@
   }
 
   function $(query, el) {
-    el = el || document
-    return document.querySelector(query)
+    el = el || doc
+    return el.querySelector(query)
   }
 
   function displayZoomLevel(out) {
