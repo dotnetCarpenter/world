@@ -2,14 +2,11 @@
 world map
 
 https://it-kollektivet.github.io/world/
-https://it-kollektivet.github.io/world/high.html
-
-[svg.panzoom.js](https://it-kollektivet.github.io/world/panzoom.html)
 
 
 ## Inspiration
 
-https://github.com/ariutta/svg-pan-zoom/tree/master/src
+https://github.com/svgdotjs/svg.panzoom.js/
 
 
 ## License
