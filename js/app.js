@@ -33,28 +33,19 @@
     })
 
     SVG.on(controls[0], "click", function() {
-      var p = getCenterPoint(world)
-
-      world.zoom(0.5, p, { duration: 250, easing: "<>" })
+      world.animate(250, "<>").zoom(0.5)
+      //world.zoom(0.5)
     })
 
     SVG.on(controls[1], "click", function() {
-      var p = getCenterPoint(world)
-
-      world.zoom(1.5, p, { duration: 200, easing: ">" })
+      world.animate(200, ">").zoom(1.5)
+      //world.zoom(1.5)
     })
 
     SVG.on(controls[2], "click", function() {
-      var p = getCenterPoint(world)
-
-      world.zoomToOne(p, { duration: 400, easing: "<>" })
+      world.animate(400, "<>").zoomToOne()
+      //world.zoomToOne()
     })
-  }
-
-  function getCenterPoint(element) {
-    var size = element.node.getBoundingClientRect()
-    return element.point(size.width / 2,
-                         size.height/ 2)
   }
 
 }(document))
