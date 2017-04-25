@@ -9,6 +9,15 @@
 				position: fixed;
 				right: 1em;
 			}
+			.info-box__button-list {
+				padding: 0;
+
+				text-align: right;
+				list-style: none;
+			}
+			.info-box__button {
+				min-width: 8em;				
+			}
 
 			svg {
 				cursor: pointer;
@@ -38,8 +47,11 @@
 					<legend>tools</legend>
 					<div>
 						<p>Current zoom level: <b class="info-box__zoom-factor"></b></p>
-						<label><input type="button" value="zoom in" class="info-box__button info-box__button_in"></label>
-						<label><input type="button" value="zoom out" class="info-box__button info-box__button_out"></label>
+						<ul class="info-box__button-list">
+							<li><input type="button" value="zoom in" class="info-box__button info-box__button_in"></li>
+							<li><input type="button" value="zoom out" class="info-box__button info-box__button_out"></li>
+							<li><input type="button" value="zoom to 1" class="info-box__button info-box__button_default"></li>
+						</ul>
 					</div>
 				</fieldset>
 			</form>

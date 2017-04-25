@@ -3,19 +3,20 @@
 !(function(win, doc) {
 
   var world = SVG("worldmap")
-  var controls = [$(".info-box__button_in"), $(".info-box__button_out")]
+  var controls = [$(".info-box__button_in"), $(".info-box__button_out"), $('.info-box__button_default')]
   var zoomFactorOut = displayZoomLevel($(".info-box__zoom-factor"))
   var currentZoomLevel = 1
 
   main()
 
   function main() {
-    zoomFactorOut(currentZoomLevel)	
+    zoomFactorOut(currentZoomLevel)
 
     world.panZoom({ zoomFactor: 0.2 })
 
-    world.on("zoom", function(z) {
-      currentZoomLevel = z.detail.zoomLevel
+    world.on("zoom", function() {
+      //console.debug(z.detail)
+      currentZoomLevel = this.zoomLevel()
       zoomFactorOut(currentZoomLevel)
     })
 
@@ -29,6 +30,12 @@
       var p = getCenterPoint(world)
 
       world.zoom(1.5, p, { duration: 200, easing: ">" })
+    })
+
+    SVG.on(controls[2], "click", function() {
+      var p = getCenterPoint(world)
+
+      world.zoomToOne(p, { duration: 400, easing: "<>" })
     })
   }
 
