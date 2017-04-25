@@ -41,3 +41,6 @@ bower_components
 
 # nano text editor tmp files
 .*.swp
+
+# visual code IDE settings
+.vscode
