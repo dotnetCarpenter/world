@@ -47,8 +47,8 @@ SVG.extend(SVG.Doc, SVG.Nested, SVG.FX, {
 			SVG.on(document, 'touchmove', pinchZoom, this, {passive:false})
 			SVG.on(document, 'touchend', pinchZoomStop, this, {passive:false})
 
-			//TODO: when to fire zoom?			
-			this.fire('zoomstart')		
+			//TODO: when to fire zoom?
+			this.fire('zoomStart')
 		}
 
 		var pinchZoomStop = function(ev) {
@@ -97,7 +97,7 @@ SVG.extend(SVG.Doc, SVG.Nested, SVG.FX, {
 			lastTouches = currentTouches
 
 			//TODO: when to fire zoom?
-			this.fire('zoom')
+			this.fire('zoomEnd')
 		}
 
 		var panStart = function(ev) {
@@ -161,6 +161,8 @@ SVG.extend(SVG.Doc, SVG.Nested, SVG.FX, {
 
 		if(point == null) point = getCenterPoint(target)
 
+		target.fire('zoomStart')
+
 		var b = new SVG.Box(target.viewbox())
 			.transform(new SVG.Matrix()
 					.scale(zoomlevel, point.x, point.y))
@@ -168,14 +170,14 @@ SVG.extend(SVG.Doc, SVG.Nested, SVG.FX, {
 		this.viewbox(b)
 
 		//TODO: when to fire zoom?
-		if(isAnimating) this.after(target.fire.bind(target, 'zoom'))
-		else target.fire('zoom')
+		if(isAnimating) this.after(target.fire.bind(target, 'zoomEnd'))
+		else target.fire('zoomEnd')
 
 		return this
 	},
 
 	zoomToOne: function(point) {
-		// get target in case of the fx module, otherwise reference this		
+		// get target in case of the fx module, otherwise reference this
 		var target = this instanceof SVG.FX ? this.target() : this
 
 		this.zoom(target.zoomLevel(), point)
