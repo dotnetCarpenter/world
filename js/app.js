@@ -28,7 +28,7 @@
 
     world.on("zoom", function() {
       //console.debug(z.detail)
-      currentZoomLevel = this.zoomLevel()
+      currentZoomLevel = world.zoomLevel()
       zoomFactorOut(currentZoomLevel)
     })
 

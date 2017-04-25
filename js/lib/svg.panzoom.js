@@ -153,8 +153,9 @@ SVG.extend(SVG.Doc, SVG.Nested, SVG.FX, {
 	},
 
 	zoom: function(zoomlevel, point) {
+		var isAnimating = this instanceof SVG.FX
 		// get target in case of the fx module, otherwise reference this
-		var target = this instanceof SVG.FX ? this.target() : this
+		var target = isAnimating ? this.target() : this
 
 		if(arguments.length === 0) return target.zoomLevel()
 
@@ -167,7 +168,8 @@ SVG.extend(SVG.Doc, SVG.Nested, SVG.FX, {
 		this.viewbox(b)
 
 		//TODO: when to fire zoom?
-		target.fire('zoom')
+		if(isAnimating) this.after(target.fire.bind(target, 'zoom'))
+		else target.fire('zoom')
 
 		return this
 	},
