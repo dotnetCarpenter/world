@@ -1,11 +1,23 @@
 "use strict"
 
-!(function(win, doc) {
+!(function(doc) {
 
   var world = SVG("worldmap")
   var controls = [$(".info-box__button_in"), $(".info-box__button_out"), $('.info-box__button_default')]
   var zoomFactorOut = displayZoomLevel($(".info-box__zoom-factor"))
   var currentZoomLevel = 1
+
+
+  function $(query, el) {
+    el = el || doc
+    return el.querySelector(query)
+  }
+
+  function displayZoomLevel(out) {
+    return function(level) {
+      out.textContent = level.toFixed(2)
+    }
+  }
 
   main()
 
@@ -39,21 +51,10 @@
     })
   }
 
-  function $(query, el) {
-    el = el || doc
-    return el.querySelector(query)
-  }
-
-  function displayZoomLevel(out) {
-    return function(level) {
-      out.textContent = level.toFixed(2)
-    }
-  }
-
   function getCenterPoint(element) {
     var size = element.node.getBoundingClientRect()
     return element.point(size.width / 2,
                          size.height/ 2)
   }
 
-}(window, document))
+}(document))
