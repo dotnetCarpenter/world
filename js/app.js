@@ -18,17 +18,15 @@
     }
   }
 
-  main(world)
+  main()
 
-  function main(world) {
+  function main() {
     displayZoomLevel(1)
 
     world.panZoom({ zoomFactor: 0.2 })
 
-    //introAnimation(world)
-
     world.on("zoomEnd", function() {
-      displayZoomLevel(world.zoom())
+      displayZoomLevel(world.zoomLevel())
     })
 
     SVG.on(controls[0], "click", function() {
@@ -45,12 +43,6 @@
       world.animate(400, "<>").zoomToOne()
       //world.zoomToOne()
     })
-  }
-
-  function introAnimation(world) {
-    world.zoom(-50)
-      .animate(1000, "<", 250)
-      .zoom(50)
   }
 
 }(document))
