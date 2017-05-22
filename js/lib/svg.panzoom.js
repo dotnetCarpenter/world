@@ -18,6 +18,8 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var wheelZoom = function(ev) {
       ev.preventDefault()
+      console.log("wheelZoom")
+
 
       var zoomAmount = this.zoom() - zoomFactor * ev.deltaY/Math.abs(ev.deltaY)
         , p = this.point(ev.clientX, ev.clientY)
@@ -26,6 +28,8 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     }
 
     var pinchZoomStart = function(ev) {
+      console.log("pinchZoomStop", lastTouches.length)
+
       lastTouches = normalizeEvent(ev)
 
       if(lastTouches.length < 2 || zoomInProgress) return
@@ -41,6 +45,8 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     var pinchZoomStop = function(ev) {
       ev.preventDefault()
       zoomInProgress = false
+      console.log("pinchZoomStop")
+
 
       SVG.off(document,'touchmove', pinchZoom)
       SVG.off(document,'touchend', pinchZoomStop)
@@ -51,6 +57,8 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var pinchZoom = function(ev) {
       ev.preventDefault()
+      console.log("pinchZoom")
+
       var currentTouches = normalizeEvent(ev)
 
       var lastDelta = Math.sqrt( Math.pow(lastTouches[0].clientX - lastTouches[1].clientX, 2) + Math.Pow(lastTouches[0].clientY - lastTouches[1].clientY, 2) )
@@ -86,6 +94,8 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var panStart = function(ev) {
       ev.preventDefault()
+      console.log("panStart")
+
 
       this.off('mousedown', panStart)
       this.off('touchstart', panStart)
@@ -104,6 +114,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var panStop = function(ev) {
       ev.preventDefault()
+      console.log("panStop")
 
       SVG.off(document,'mousemove', panning)
       SVG.off(document,'touchmove', panning)
@@ -115,6 +126,8 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var panning = function(ev) {
       ev.preventDefault()
+      console.log("panning")
+
       var currentTouches = normalizeEvent(ev)
 
       var currentP = {x: currentTouches[0].clientX, y: currentTouches[0].clientY }
@@ -137,6 +150,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
   },
 
   zoom: function(level, point) {
+    console.log("zoom")
     var style = window.getComputedStyle(this.node)
       , width = parseFloat(style.getPropertyValue('width'))
       , height = parseFloat(style.getPropertyValue('height'))
