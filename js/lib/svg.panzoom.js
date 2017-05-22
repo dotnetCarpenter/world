@@ -28,9 +28,9 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     }
 
     var pinchZoomStart = function(ev) {
-      console.log("pinchZoomStop", lastTouches.length)
-
       lastTouches = normalizeEvent(ev)
+
+      console.log("pinchZoomStop", lastTouches.length)
 
       if(lastTouches.length < 2 || zoomInProgress) return
       ev.preventDefault()
