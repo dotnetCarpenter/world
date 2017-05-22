@@ -18,7 +18,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var wheelZoom = function(ev) {
       ev.preventDefault()
-      console.log("wheelZoom")
+      console.debug("wheelZoom")
 
 
       var zoomAmount = this.zoom() - zoomFactor * ev.deltaY/Math.abs(ev.deltaY)
@@ -30,7 +30,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     var pinchZoomStart = function(ev) {
 
       lastTouches = normalizeEvent(ev)
-      console.log("pinchZoomStop", lastTouches.length)
+      console.debug("pinchZoomStop", lastTouches.length)
 
       if(lastTouches.length < 2 || zoomInProgress) return
       ev.preventDefault()
@@ -45,7 +45,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     var pinchZoomStop = function(ev) {
       ev.preventDefault()
       zoomInProgress = false
-      console.log("pinchZoomStop")
+      console.debug("pinchZoomStop")
 
 
       SVG.off(document,'touchmove', pinchZoom)
@@ -57,7 +57,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var pinchZoom = function(ev) {
       ev.preventDefault()
-      console.log("pinchZoom")
+      console.debug("pinchZoom")
 
       var currentTouches = normalizeEvent(ev)
 
@@ -94,7 +94,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var panStart = function(ev) {
       ev.preventDefault()
-      console.log("panStart")
+      //console.log("panStart")
 
 
       this.off('mousedown', panStart)
@@ -114,7 +114,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var panStop = function(ev) {
       ev.preventDefault()
-      console.log("panStop")
+      console.debug("panStop")
 
       SVG.off(document,'mousemove', panning)
       SVG.off(document,'touchmove', panning)
@@ -126,7 +126,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var panning = function(ev) {
       ev.preventDefault()
-      console.log("panning")
+      console.debug("panning")
 
       var currentTouches = normalizeEvent(ev)
 
@@ -150,7 +150,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
   },
 
   zoom: function(level, point) {
-    console.log("zoom")
+    console.debug("zoom")
     var style = window.getComputedStyle(this.node)
       , width = parseFloat(style.getPropertyValue('width'))
       , height = parseFloat(style.getPropertyValue('height'))
