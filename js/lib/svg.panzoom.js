@@ -61,6 +61,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
       var currentTouches = normalizeEvent(ev)
 
+      // Distance Formula
       var lastDelta = Math.sqrt( Math.pow(lastTouches[0].clientX - lastTouches[1].clientX, 2) + Math.pow(lastTouches[0].clientY - lastTouches[1].clientY, 2) )
       var currentDelta = Math.sqrt( Math.pow(currentTouches[0].clientX - currentTouches[1].clientX, 2) + Math.pow(currentTouches[0].clientY - currentTouches[1].clientY, 2) )
 
@@ -90,6 +91,8 @@ SVG.extend(SVG.Doc, SVG.Nested, {
       this.viewbox(b)
 
       lastTouches = currentTouches
+
+      this.fire('zoom', {level: level, box: box, focus: point})
     }
 
     var panStart = function(ev) {
@@ -180,8 +183,8 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 })
 
 SVG.extend(SVG.FX, {
-  zoom: function(level) {
-    return this.add('zoom', new SVG.Number(level))
+  zoom: function(level, point) {
+    return this.add('zoom', new SVG.Number(level), point)
   }
 })
 

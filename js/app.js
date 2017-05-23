@@ -21,28 +21,31 @@
   main()
 
   function main() {
-    displayZoomLevel(1)
-
     world.panZoom({ zoomFactor: 0.2 })
 
-    world.on("zoomEnd", function() {
-      displayZoomLevel(world.zoomLevel())
-    })
+    var zoomLevel = world.zoom()
+    
+    var displayWorldZoomLevel = function() {
+      zoomLevel = world.zoom()
+      displayZoomLevel(zoomLevel)
+    }
+
+    SVG.on(window, "resize", displayWorldZoomLevel)
+    world.on("zoom", displayWorldZoomLevel)
 
     SVG.on(controls[0], "click", function() {
-      world.animate(250, "<>").zoom(0.5)
-      //world.zoom(0.5)
+      world.animate(250, "<>").zoom(zoomLevel + .5)
     })
 
     SVG.on(controls[1], "click", function() {
-      world.animate(200, ">").zoom(1.5)
-      //world.zoom(1.5)
+      world.animate(200, ">").zoom(zoomLevel - .5)
     })
 
     SVG.on(controls[2], "click", function() {
-      world.animate(400, "<>").zoomToOne()
-      //world.zoomToOne()
+      world.animate(400, "<>").zoom(1)
     })
+
+    displayWorldZoomLevel()
   }
 
 }(document))
