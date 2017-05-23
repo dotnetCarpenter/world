@@ -80,7 +80,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
       var p = this.point(currentFocus.x, currentFocus.y)
       var focusP = this.point(2*currentFocus.x-lastFocus.x, 2*currentFocus.y-lastFocus.y)
-      var b = new SVG.Box(this.viewbox()).transform(
+      var box = new SVG.Box(this.viewbox()).transform(
         new SVG.Matrix()
           .translate(p.x, p.y)
           .scale(zoomAmount, 0, 0)
@@ -88,11 +88,11 @@ SVG.extend(SVG.Doc, SVG.Nested, {
       )
 
 
-      this.viewbox(b)
+      this.viewbox(box)
 
       lastTouches = currentTouches
 
-      this.fire('zoom', {level: level, box: box, focus: point})
+      this.fire('zoom', {box: box, focus: focusP})
     }
 
     var panStart = function(ev) {
@@ -175,7 +175,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
         .scale(zoomAmount, point.x, point.y)
       )
 
-    if(this.fire('zoom', {level: level, box: box, focus: point}).event().defaultPrevented)
+    if(this.fire('zoom', {box: box, focus: point}).event().defaultPrevented)
       return this
 
     return this.viewbox(box)
