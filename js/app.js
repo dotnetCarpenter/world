@@ -2,6 +2,19 @@
 
 !(function(doc) {
 
+  var passiveSupported = false;
+  try {
+    var options = Object.defineProperty({}, "passive", {
+      get: function() {
+        passiveSupported = true;
+      }
+    });
+
+    window.addEventListener("test", null, options);
+  } catch(err) {}
+  console.log("passiveSupported", passiveSupported)
+
+
   var world = SVG("worldmap")
   var controls = [$(".info-box__button_in"), $(".info-box__button_out"), $('.info-box__button_default')]
   var displayZoomLevel = setupDisplayZoomLevel($(".info-box__zoom-factor"))
@@ -21,10 +34,10 @@
   main()
 
   function main() {
-    world.panZoom({ zoomFactor: 0.2 })
+   world.panZoom({ zoomFactor: 0.2 })
 
-    var zoomLevel = world.zoom()
-    
+    var zoomLevel
+
     var displayWorldZoomLevel = function() {
       zoomLevel = world.zoom()
       displayZoomLevel(zoomLevel)
@@ -34,11 +47,11 @@
     world.on("zoom", displayWorldZoomLevel)
 
     SVG.on(controls[0], "click", function() {
-      world.animate(250, "<>").zoom(zoomLevel + .5)
+      world.animate(250, "<>").zoom(zoomLevel / .2)
     })
 
     SVG.on(controls[1], "click", function() {
-      world.animate(200, ">").zoom(zoomLevel - .5)
+      world.animate(200, ">").zoom(zoomLevel * .2)
     })
 
     SVG.on(controls[2], "click", function() {

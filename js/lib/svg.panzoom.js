@@ -18,8 +18,6 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var wheelZoom = function(ev) {
       ev.preventDefault()
-      console.debug("wheelZoom")
-
 
       var zoomAmount = this.zoom() - zoomFactor * ev.deltaY/Math.abs(ev.deltaY)
         , p = this.point(ev.clientX, ev.clientY)
@@ -28,9 +26,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     }
 
     var pinchZoomStart = function(ev) {
-
       lastTouches = normalizeEvent(ev)
-      console.debug("pinchZoomStop", lastTouches.length)
 
       if(lastTouches.length < 2 || zoomInProgress) return
       ev.preventDefault()
@@ -45,8 +41,6 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     var pinchZoomStop = function(ev) {
       ev.preventDefault()
       zoomInProgress = false
-      console.debug("pinchZoomStop")
-
 
       SVG.off(document,'touchmove', pinchZoom)
       SVG.off(document,'touchend', pinchZoomStop)
@@ -57,7 +51,6 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var pinchZoom = function(ev) {
       ev.preventDefault()
-      console.debug("pinchZoom")
 
       var currentTouches = normalizeEvent(ev)
 
@@ -97,8 +90,6 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var panStart = function(ev) {
       ev.preventDefault()
-      //console.log("panStart")
-
 
       this.off('mousedown', panStart)
       this.off('touchstart', panStart)
@@ -117,7 +108,6 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var panStop = function(ev) {
       ev.preventDefault()
-      console.debug("panStop")
 
       SVG.off(document,'mousemove', panning)
       SVG.off(document,'touchmove', panning)
@@ -129,7 +119,6 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var panning = function(ev) {
       ev.preventDefault()
-      console.debug("panning")
 
       var currentTouches = normalizeEvent(ev)
 
@@ -153,7 +142,6 @@ SVG.extend(SVG.Doc, SVG.Nested, {
   },
 
   zoom: function(level, point) {
-    console.debug("zoom")
     var style = window.getComputedStyle(this.node)
       , width = parseFloat(style.getPropertyValue('width'))
       , height = parseFloat(style.getPropertyValue('height'))
