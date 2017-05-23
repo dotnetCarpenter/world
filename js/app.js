@@ -12,7 +12,8 @@
 
     window.addEventListener("test", null, options);
   } catch(err) {}
-  console.log("passiveSupported", passiveSupported)
+  console.log("passiveSupported")
+  console.log(passiveSupported)
 
 
   var world = SVG("worldmap")
