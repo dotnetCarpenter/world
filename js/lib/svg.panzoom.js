@@ -133,9 +133,9 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     }
 
     this.on('wheel', wheelZoom)
-    this.on('touchstart', pinchZoomStart, this/*, {passive:false}*/)
-    this.on('mousedown', panStart, this/*, {passive:false}*/)
-    this.on('touchstart', panStart, this/*, {passive:false}*/)
+    this.on('touchstart', pinchZoomStart, this, {passive:false})
+    this.on('mousedown', panStart, this, {passive:false})
+    this.on('touchstart', panStart, this, {passive:false})
 
     return this
 
