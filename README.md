@@ -1,7 +1,7 @@
 # world
 world map
 
-https://it-kollektivet.github.io/world/
+Repo: https://gitlab.com/cartouche/udvikling/world
 
 
 ## Inspiration
