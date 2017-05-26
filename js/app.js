@@ -44,6 +44,57 @@
     })
 
     displayWorldZoomLevel()
+
+    var lastP
+    var normalizeEvent = function(ev) {
+      if(!ev.touches) {
+        ev.touches = [{clientX: ev.clientX, clientY: ev.clientY}]
+      }
+
+      return [].slice.call(ev.touches)
+    }
+    var panStart = function(ev) {
+      ev.preventDefault()
+
+      world.off('touchstart', panStart)
+
+      let lastTouches = normalizeEvent(ev)
+
+      // TODO: this is important
+      // if(zoomInProgress) return
+
+      lastP = {x: lastTouches[0].clientX, y: lastTouches[0].clientY }
+
+      SVG.on(document, 'touchmove', panning, world, {passive:false})
+      SVG.on(document, 'touchend', panStop, world, {passive:false})
+    }
+
+    var panStop = function(ev) {
+      ev.preventDefault()
+
+      SVG.off(document,'touchmove', panning)
+      SVG.off(document,'touchend', panStop)
+      world.on('touchstart', panStart)
+    }
+
+    var panning = function(ev) {
+      ev.preventDefault()
+
+      var currentTouches = normalizeEvent(ev)
+
+      var currentP = {x: currentTouches[0].clientX, y: currentTouches[0].clientY }
+        , p1 = this.point(currentP.x, currentP.y)
+        , p2 = this.point(lastP.x, lastP.y)
+        , deltaP = [p2.x - p1.x, p2.y - p1.y]
+        , box = new SVG.Box(this.viewbox()).transform(new SVG.Matrix().translate(deltaP[0], deltaP[1]))
+
+      this.viewbox(box)
+      lastP = currentP
+    }
+
+    // TODO - test in user-land
+    world.on('touchstart', panStart, world, {passive:false})
+
   }
 
 }(document))
