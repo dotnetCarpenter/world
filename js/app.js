@@ -25,22 +25,43 @@
         previousZoomLevel
     zoomLevel = previousZoomLevel = 0
 
+    var resetCursor = debounce(resetClasses('zoom-in', 'zoom-out'), 300)
+
     world.on('panStart', function() {
       world.addClass('dragging')
     })
     world.on('panEnd', function() {
       world.removeClass('dragging')
     })
-    world.on('zoomStart', debounce(function() {
-      console.log(zoomLevel - previousZoomLevel)
+    world.on('zoom', debounce(function() {
+      console.log(zoomLevel, previousZoomLevel)
 
-      world.addClass('zoom-in')
+      if(zoomLevel > previousZoomLevel) {
+        world.addClass('zoom-in')
+        world.removeClass('zoom-out')
+      } else {
+        world.addClass('zoom-out')
+        world.removeClass('zoom-in')
+      }
+
+      setTimeout(resetCursor, 300)
+
     }, 300, true))
-    world.on('zoomEnd', debounce(function() {
-      // console.log(zoomLevel - previousZoomLevel)
 
-      world.removeClass('zoom-in')
-    }, 300))
+    function resetClasses(/*classes*/) {
+      var classes = [].slice.call(arguments)
+      return function() {
+        classes.forEach(function(c) {
+          world.removeClass(c)
+        })
+      }
+    }
+
+    // world.on('panStart', console.log)
+    // world.on('panEnd', console.log)
+    // world.on('zoom', console.log)
+    // world.on('pinchZoomStart', console.log)
+    // world.on('pinchZoomEnd', console.log)
 
     var displayWorldZoomLevel = function() {
       previousZoomLevel = zoomLevel
@@ -49,7 +70,7 @@
     }
 
     SVG.on(window, "resize", displayWorldZoomLevel)
-    world.on("zoomEnd", displayWorldZoomLevel)
+    world.on("zoom", displayWorldZoomLevel)
 
     SVG.on(controls[0], "click", function() {
       world.animate(250, "<>").zoom(zoomLevel * 1.2)
