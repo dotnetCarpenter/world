@@ -1,4 +1,3 @@
-(function() {
 'use strict'
 
 var normalizeEvent = function(ev) {
@@ -30,27 +29,28 @@ SVG.extend(SVG.Doc, SVG.Nested, {
       ev = normalizeEvent(ev)
       lastTouches = ev.touches
 
-      if(lastTouches.length < 2 || zoomInProgress) return
+      if(lastTouches.length < 2) return
       ev.preventDefault()
 
-      panStop.call(this, ev)
+      if(this.fire('pinchZoomStart', {event: ev}).event().defaultPrevented)
+        return
+
+      this.off('touchstart', pinchZoomStart)
 
       zoomInProgress = true
       SVG.on(document, 'touchmove', pinchZoom, this, {passive:false})
       SVG.on(document, 'touchend', pinchZoomStop, this, {passive:false})
-
-      this.fire('zoomStart', ev)
     }
 
     var pinchZoomStop = function(ev) {
       ev.preventDefault()
       zoomInProgress = false
 
+      this.fire('pinchZoomEnd', {event: normalizeEvent(ev)})
+
       SVG.off(document,'touchmove', pinchZoom)
       SVG.off(document,'touchend', pinchZoomStop)
       this.on('touchstart', pinchZoomStart)
-
-      if(ev.touches.length > 0) panStart.call(this, ev)
     }
 
     var pinchZoom = function(ev) {
@@ -59,8 +59,15 @@ SVG.extend(SVG.Doc, SVG.Nested, {
       var currentTouches = normalizeEvent(ev).touches
 
       // Distance Formula
-      var lastDelta = Math.sqrt( Math.pow(lastTouches[0].clientX - lastTouches[1].clientX, 2) + Math.pow(lastTouches[0].clientY - lastTouches[1].clientY, 2) )
-      var currentDelta = Math.sqrt( Math.pow(currentTouches[0].clientX - currentTouches[1].clientX, 2) + Math.pow(currentTouches[0].clientY - currentTouches[1].clientY, 2) )
+      var lastDelta = Math.sqrt(
+        Math.pow(lastTouches[0].clientX - lastTouches[1].clientX, 2) +
+        Math.pow(lastTouches[0].clientY - lastTouches[1].clientY, 2)
+      )
+
+      var currentDelta = Math.sqrt(
+        Math.pow(currentTouches[0].clientX - currentTouches[1].clientX, 2) +
+        Math.pow(currentTouches[0].clientY - currentTouches[1].clientY, 2)
+      )
 
       var zoomAmount = lastDelta/currentDelta
 
@@ -73,7 +80,6 @@ SVG.extend(SVG.Doc, SVG.Nested, {
         x: lastTouches[0].clientX + 0.5 * (lastTouches[1].clientX - lastTouches[0].clientX),
         y: lastTouches[0].clientY + 0.5 * (lastTouches[1].clientY - lastTouches[0].clientY)
       }
-
 
       var p = this.point(currentFocus.x, currentFocus.y)
       var focusP = this.point(2*currentFocus.x-lastFocus.x, 2*currentFocus.y-lastFocus.y)
@@ -88,7 +94,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
       lastTouches = currentTouches
 
-      this.fire('zoomEnd', {box: box, focus: focusP})
+      this.fire('zoom', {box: box, focus: focusP})
     }
 
     var panStart = function(ev) {
@@ -96,12 +102,12 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
       this.off('mousedown', panStart)
 
+      if(zoomInProgress) return
+
       ev = normalizeEvent(ev)
       lastTouches = ev.touches
 
-      if(zoomInProgress) return
-
-      this.fire('panStart', ev)
+      this.fire('panStart', {event: ev})
 
       lastP = {x: lastTouches[0].clientX, y: lastTouches[0].clientY }
 
@@ -137,12 +143,13 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     this.on('wheel', wheelZoom)
     this.on('touchstart', pinchZoomStart, this, {passive:false})
-    this.on('mousedown', panStart, this, {passive:false})
+    this.on('mousedown', panStart, this)
 
     return this
+
   },
 
-  zoom: function(level, point, ev) {
+  zoom: function(level, point) {
     var style = window.getComputedStyle(this.node)
       , width = parseFloat(style.getPropertyValue('width'))
       , height = parseFloat(style.getPropertyValue('height'))
@@ -150,7 +157,6 @@ SVG.extend(SVG.Doc, SVG.Nested, {
       , zoomX = width / v.width
       , zoomY = height / v.height
       , zoom = Math.min(zoomX, zoomY)
-      , newViewbox
 
     if(level == null) {
       return zoom
@@ -165,19 +171,15 @@ SVG.extend(SVG.Doc, SVG.Nested, {
         .scale(zoomAmount, point.x, point.y)
       )
 
-    if(this.fire('zoomStart', ev).event().defaultPrevented)
+    if(this.fire('zoom', {box: box, focus: point}).event().defaultPrevented)
       return this
 
-    newViewbox = this.viewbox(box)
-
-    this.fire('zoomEnd', {box: box, focus: point})
-  },
-})
-
-SVG.extend(SVG.FX, {
-  zoom: function(level, point, ev) {
-    return this.add('zoom', new SVG.Number(level), point, ev)
+    return this.viewbox(box)
   }
 })
 
-})()
+SVG.extend(SVG.FX, {
+  zoom: function(level, point) {
+    return this.add('zoom', new SVG.Number(level), point)
+  }
+})
