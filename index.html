@@ -4,7 +4,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+
   <title>Worldmap</title>
+
+  <link rel="stylesheet" href="run/css/bootstrap.min.css">
+  <link rel="stylesheet" href="run/css/svg.css">
   <style type="text/css">
     .info-box {
       position: fixed;
@@ -27,7 +31,15 @@
     }
 
     svg.dragging {
-      cursor: move;
+      cursor: all-scroll;
+    }
+
+    svg.zoom-in {
+      cursor: zoom-in;
+    }
+
+    svg.zoom-out {
+      cursor: zoom-out;
     }
 
     .land {

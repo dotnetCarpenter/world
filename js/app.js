@@ -21,15 +21,35 @@
   function main() {
     world.panZoom({ zoomFactor: 0.2 })
 
-    var zoomLevel
+    var zoomLevel,
+        previousZoomLevel
+    zoomLevel = previousZoomLevel = 0
+
+    world.on('panStart', function() {
+      world.addClass('dragging')
+    })
+    world.on('panEnd', function() {
+      world.removeClass('dragging')
+    })
+    world.on('zoomStart', debounce(function() {
+      console.log(zoomLevel - previousZoomLevel)
+
+      world.addClass('zoom-in')
+    }, 300, true))
+    world.on('zoomEnd', debounce(function() {
+      // console.log(zoomLevel - previousZoomLevel)
+
+      world.removeClass('zoom-in')
+    }, 300))
 
     var displayWorldZoomLevel = function() {
+      previousZoomLevel = zoomLevel
       zoomLevel = world.zoom()
       displayZoomLevel(zoomLevel)
     }
 
     SVG.on(window, "resize", displayWorldZoomLevel)
-    world.on("zoom", displayWorldZoomLevel)
+    world.on("zoomEnd", displayWorldZoomLevel)
 
     SVG.on(controls[0], "click", function() {
       world.animate(250, "<>").zoom(zoomLevel * 1.2)
@@ -45,6 +65,23 @@
 
     displayWorldZoomLevel()
 
+
+    function debounce(func, wait, immediate) {
+      var timeout
+      return function() {
+        var context = this, args = arguments
+        var later = function() {
+          timeout = null
+          if (!immediate) func.apply(context, args)
+        }
+        var callNow = immediate && !timeout
+        clearTimeout(timeout)
+        timeout = setTimeout(later, wait)
+        if (callNow) func.apply(context, args)
+      }
+    }
+
+    /*
     var lastP
     var normalizeEvent = function(ev) {
       if(!ev.touches) {
@@ -92,8 +129,9 @@
       lastP = currentP
     }
 
-    // TODO - test in user-land
+    // user-land single touch pan
     world.on('touchstart', panStart, world, {passive:false})
+    */
 
   }
 
