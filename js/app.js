@@ -19,13 +19,9 @@
   main()
 
   function main() {
-    world.panZoom({ zoomFactor: 0.2 })
+    world.panZoom({ zoomFactor: 0.4 })
 
-    var zoomLevel,
-        previousZoomLevel
-    zoomLevel = previousZoomLevel = 0
-
-    var resetCursor = debounce(resetClasses('zoom-in', 'zoom-out'), 300)
+    var zoomLevel = 0
 
     world.on('panStart', function() {
       world.addClass('dragging')
@@ -33,29 +29,6 @@
     world.on('panEnd', function() {
       world.removeClass('dragging')
     })
-    world.on('zoom', debounce(function() {
-      console.log(zoomLevel, previousZoomLevel)
-
-      if(zoomLevel > previousZoomLevel) {
-        world.addClass('zoom-in')
-        world.removeClass('zoom-out')
-      } else {
-        world.addClass('zoom-out')
-        world.removeClass('zoom-in')
-      }
-
-      setTimeout(resetCursor, 300)
-
-    }, 300, true))
-
-    function resetClasses(/*classes*/) {
-      var classes = [].slice.call(arguments)
-      return function() {
-        classes.forEach(function(c) {
-          world.removeClass(c)
-        })
-      }
-    }
 
     // world.on('panStart', console.log)
     // world.on('panEnd', console.log)
@@ -64,7 +37,6 @@
     // world.on('pinchZoomEnd', console.log)
 
     var displayWorldZoomLevel = function() {
-      previousZoomLevel = zoomLevel
       zoomLevel = world.zoom()
       displayZoomLevel(zoomLevel)
     }
@@ -73,11 +45,11 @@
     world.on("zoom", displayWorldZoomLevel)
 
     SVG.on(controls[0], "click", function() {
-      world.animate(250, "<>").zoom(zoomLevel * 1.2)
+      world.animate(250, "<>").zoom(zoomLevel * 1.4)
     })
 
     SVG.on(controls[1], "click", function() {
-      world.animate(200, ">").zoom(zoomLevel * .8)
+      world.animate(200, ">").zoom(zoomLevel * .6)
     })
 
     SVG.on(controls[2], "click", function() {
@@ -87,6 +59,7 @@
     displayWorldZoomLevel()
 
 
+/*
     function debounce(func, wait, immediate) {
       var timeout
       return function() {
@@ -101,6 +74,7 @@
         if (callNow) func.apply(context, args)
       }
     }
+*/
 
     /*
     var lastP
