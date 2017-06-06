@@ -5,7 +5,7 @@ var normalizeEvent = function(ev) {
     ev.touches = [{clientX: ev.clientX, clientY: ev.clientY}]
   }
 
-  return ev
+  return ev.touches
 }
 
 SVG.extend(SVG.Doc, SVG.Nested, {
@@ -22,12 +22,11 @@ SVG.extend(SVG.Doc, SVG.Nested, {
       var zoomAmount = this.zoom() - zoomFactor * ev.deltaY/Math.abs(ev.deltaY)
         , p = this.point(ev.clientX, ev.clientY)
 
-      this.zoom(zoomAmount, p, normalizeEvent(ev))
+      this.zoom(zoomAmount, p)
     }
 
     var pinchZoomStart = function(ev) {
-      ev = normalizeEvent(ev)
-      lastTouches = ev.touches
+      lastTouches = normalizeEvent(ev)
 
       if(lastTouches.length < 2) return
       ev.preventDefault()
@@ -46,7 +45,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
       ev.preventDefault()
       zoomInProgress = false
 
-      this.fire('pinchZoomEnd', {event: normalizeEvent(ev)})
+      this.fire('pinchZoomEnd', {event: ev})
 
       SVG.off(document,'touchmove', pinchZoom)
       SVG.off(document,'touchend', pinchZoomStop)
@@ -56,7 +55,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     var pinchZoom = function(ev) {
       ev.preventDefault()
 
-      var currentTouches = normalizeEvent(ev).touches
+      var currentTouches = normalizeEvent(ev)
 
       // Distance Formula
       var lastDelta = Math.sqrt(
@@ -102,10 +101,9 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
       this.off('mousedown', panStart)
 
-      if(zoomInProgress) return
+      lastTouches = normalizeEvent(ev)
 
-      ev = normalizeEvent(ev)
-      lastTouches = ev.touches
+      if(zoomInProgress) return
 
       this.fire('panStart', {event: ev})
 
@@ -118,8 +116,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     var panStop = function(ev) {
       ev.preventDefault()
 
-      // TODO: should fire the same object as zoomEnd
-      this.fire('panEnd', ev)
+      this.fire('panEnd', {event: ev})
 
       SVG.off(document,'mousemove', panning)
       SVG.off(document,'mouseup', panStop)
@@ -129,7 +126,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     var panning = function(ev) {
       ev.preventDefault()
 
-      var currentTouches = normalizeEvent(ev).touches
+      var currentTouches = normalizeEvent(ev)
 
       var currentP = {x: currentTouches[0].clientX, y: currentTouches[0].clientY }
         , p1 = this.point(currentP.x, currentP.y)
