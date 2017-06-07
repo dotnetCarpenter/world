@@ -11,14 +11,14 @@
     var ORIG_ZOOM = world.zoom()
 
     world.on('panStart', function() {
-      world.addClass('dragging')
+      world.addClass('worldmap_dragging')
     })
 
     world.on('panEnd', function() {
-      world.removeClass('dragging')
+      world.removeClass('worldmap_dragging')
     })
 
-    world.on("zoom", function maxMin(ev) {
+    world.on('zoom', function maxMin(ev) {
       // max/min zoom
       var lvl = ev.detail.level
       var zoom = world.zoom()
@@ -26,6 +26,12 @@
 
       if(zoomingIn && zoom > 7) ev.preventDefault()
       else if(!zoomingIn && zoom < ORIG_ZOOM) ev.preventDefault()
+    })
+
+    world.on('click', function(ev) {
+      var className = 'worldmap__country_has-data-selected'
+      this.select('path').removeClass(className)
+      SVG.adopt(ev.target).addClass(className)
     })
 
     /*function updateZoomLevel() {
