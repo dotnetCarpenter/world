@@ -1,4 +1,13 @@
-'use strict'
+/*!
+* svg.panzoom.js - A plugin for svg.js that enables panzoom for viewport elements
+* @version 1.0.0
+* https://github.com/svgdotjs/svg.panzoom.js#readme
+*
+* @copyright Ulrich-Matthias Schäfer
+* @license MIT
+*/;
+;(function() {
+"use strict";
 
 var normalizeEvent = function(ev) {
   if(!ev.touches) {
@@ -180,3 +189,4 @@ SVG.extend(SVG.FX, {
     return this.add('zoom', new SVG.Number(level), point)
   }
 })
+}());
