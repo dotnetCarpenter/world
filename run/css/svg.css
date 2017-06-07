@@ -90,3 +90,40 @@
 .worldmap__country_has-data:active, .worldmap__country_has-data-selected {
 	fill: #29AAE2;
 }
+
+.worldmap-buttons {
+	display: block;
+	width: 32px;
+	height: 62px;
+
+	background-color: #fff;
+	border: 1px solid #84c47b;
+}
+
+.worldmap-buttons__seperator {
+	height: 1px;
+	margin: 0;
+
+	border: none;
+	background-color: #84c47b;
+}
+
+.worldmap-buttons__button {
+	position: relative;
+	height: 30px;
+	width: 30px;
+
+	color: #84c47b;
+	font-size: large;
+	font-weight: bold;
+
+	cursor: pointer;
+}
+
+.worldmap-buttons__button span {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	transform: translate(-50%, -50%);
+}

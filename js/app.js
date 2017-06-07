@@ -1,15 +1,16 @@
 "use strict"
 
-!(function(doc) {
+!(function(doc, win) {
   var world = SVG("worldmap")
 
   main()
 
   function main() {
+    // initiate
     world.panZoom({ zoomFactor: 0.4 })
-
     var ORIG_ZOOM = world.zoom()
 
+    // event handlers
     world.on('panStart', function() {
       world.addClass('worldmap_dragging')
     })
@@ -29,16 +30,34 @@
     })
 
     world.on('click', function(ev) {
+      var target = SVG.adopt(ev.target)
       var className = 'worldmap__country_has-data-selected'
+
+      if(!target.hasClass('worldmap__country')) return
+
       this.select('path').removeClass(className)
-      SVG.adopt(ev.target).addClass(className)
+      target.addClass(className)
     })
 
-    /*function updateZoomLevel() {
-      zoomLevel = world.zoom()
-    }*/
-
+   // create buttons
+  //  var zoomIn = drawButton(world)
+   //var zoomOut = zoomIn.clone()
   }
+
+  // function drawButton(world) {
+  //   var bg = world.group()
+  //   var button = bg.rect()
+  //   var line = bg.line(0, "50%", button.width(), "50%")
+  //   line.fill({
+  //     width: 1, color: '#84c47b'
+  //   })
+  //   //line.addTo(button)
+
+  //   bg.addClass('worldmap__button')
+
+
+  //   return button
+  // }
 
 
   function debounce(func, wait, immediate) {
@@ -56,4 +75,4 @@
     }
   }
 
-}(document))
+}(document, window))
