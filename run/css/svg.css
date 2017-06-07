@@ -113,17 +113,24 @@
 	height: 30px;
 	width: 30px;
 
-	color: #84c47b;
-	font-size: large;
-	font-weight: bold;
-
 	cursor: pointer;
 }
 
-.worldmap-buttons__button span {
+.worldmap-buttons__button_in::after,
+.worldmap-buttons__button_out::after {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 
+	color: #84c47b;
+	font-size: 30px;
+	font-weight: 900;
+
 	transform: translate(-50%, -50%);
+}
+.worldmap-buttons__button_in::after {
+	content: '+';
+}
+.worldmap-buttons__button_out::after {
+	content: '-';
 }
