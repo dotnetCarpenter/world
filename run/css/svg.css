@@ -53,7 +53,7 @@
 
 .info-box {
 	position: fixed;
-	left: 1em;
+	right: 1em;
 }
 
 .info-box__button-list {
