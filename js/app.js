@@ -3,11 +3,14 @@
 !(function(doc) {
   var world = SVG("worldmap")
   var controls = [$(".info-box__button_in"), $(".info-box__button_out"), $('.info-box__button_default')]
-  var displayZoomLevel = setupDisplayZoomLevel($(".info-box__zoom-factor"))
+  var displays = $(".info-box__zoom-factor")
+  var displayZoomLevel = setupDisplayZoomLevel(displays[0])
+  var displayOrigLevel = setupDisplayZoomLevel(displays[1])
 
   function $(query, el) {
     el = el || doc
-    return el.querySelector(query)
+    var ret = el.querySelectorAll(query)
+    return ret.length > 1 ? ret : ret[0]
   }
 
   function setupDisplayZoomLevel(out) {
@@ -22,13 +25,7 @@
     world.panZoom({ zoomFactor: 0.4 })
 
     var zoomLevel = 0
-
-    world.on('panStart', function() {
-      world.addClass('dragging')
-    })
-    world.on('panEnd', function() {
-      world.removeClass('dragging')
-    })
+    var originalZoomLevel = world.zoom()
 
     // world.on('panStart', console.log)
     // world.on('panEnd', console.log)
@@ -36,13 +33,13 @@
     // world.on('pinchZoomStart', console.log)
     // world.on('pinchZoomEnd', console.log)
 
-    var displayWorldZoomLevel = function() {
-      zoomLevel = world.zoom()
-      displayZoomLevel(zoomLevel)
-    }
+    world.on('panStart', function() {
+      world.addClass('dragging')
+    })
 
-    SVG.on(window, "resize", displayWorldZoomLevel)
-    world.on("zoom", displayWorldZoomLevel)
+    world.on('panEnd', function() {
+      world.removeClass('dragging')
+    })
 
     SVG.on(controls[0], "click", function() {
       world.animate(250, "<>").zoom(zoomLevel * 1.4)
@@ -53,13 +50,35 @@
     })
 
     SVG.on(controls[2], "click", function() {
-      world.animate(400, "<>").zoom(1)
+      world.animate(400, "<>").zoom(originalZoomLevel)
     })
 
+    SVG.on(window, "resize", debounce(function() {
+      displayWorldZoomLevel()
+     // displayOrigLevel(originalZoomLevel = world.zoom())
+    }), 300)
+
+    world.on("zoom", function maxMin(ev) {
+      // prevent locking via max/min zoom
+      var newZoomLevel = world.zoom()
+      var lvl = ev.detail.level
+      var zoomingIn = newZoomLevel < lvl
+
+      if(zoomingIn && newZoomLevel > 7) ev.preventDefault()
+      else if(!zoomingIn && newZoomLevel < originalZoomLevel) ev.preventDefault()
+
+      displayWorldZoomLevel()
+    })
+
+    function displayWorldZoomLevel() {
+      zoomLevel = world.zoom()
+      displayZoomLevel(zoomLevel)
+    }
+
     displayWorldZoomLevel()
+    displayOrigLevel(originalZoomLevel)
 
 
-/*
     function debounce(func, wait, immediate) {
       var timeout
       return function() {
@@ -74,7 +93,7 @@
         if (callNow) func.apply(context, args)
       }
     }
-*/
+
 
     /*
     var lastP
