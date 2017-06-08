@@ -16,6 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "svg.panzoom.js": "^1.0.0"
+    "svg.panzoom.js": "^1.0.0",
+    "svg.js": "^2.6.2"
   }
 }

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>zoom buttons in SVG</title>
+    <style>
+      .worldmap-buttons__button {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="drawing"></div>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.2/svg.js"></script>-->
+    <script src="js/lib/svg.js"></script>
+    <script>
+      // const green  = 'hsl(113, 39%, 63%)',
+      //       ph = 'hsla(198, 76%, 52%, .2)'
+      // let draw = SVG('drawing').size(100,100).viewbox(0,0,100,100)
+
+      // let bg = draw.rect()
+      //              .stroke({
+      //                width: 1,
+      //                color: green
+      //              })
+      //              .fill('white')
+      //              .radius(4)
+      //              .size(32, 64)
+      //              .move(1,1)
+      //              .id('background')
+
+      // let b1 = draw.rect(30,30)
+      //              .fill('transparent')
+      //             //  .fill(ph)
+      //              .stroke({width: 0})
+      //              .move(2,2)
+      //              .id('button-zoom-in')
+      //              .addClass("worldmap-buttons__button")
+
+      // let b2 = b1.clone()
+      //            .move(2, b1.height() + 4)
+      //            .id('button-zoom-out')
+
+      // let seperator = draw.line(1, bg.height()/2+1, bg.width()+1, bg.height()/2+1)
+      //                     .stroke({
+      //                       width: 1,
+      //                       color: green
+      //                     })
+
+      // // let helper = draw.circle(1).move(5,16)
+      // let plus = draw.path('M10 17 L24 17 M17 9 L17 25')
+      //                .stroke({
+      //                  width: 4,
+      //                  color: green
+      //                })
+      //                .attr('style', 'pointer-events: none;')
+
+
+      // let minus = draw.path('M10 48 L24 48')
+      //                 .stroke({
+      //                  width: 4,
+      //                  color: green
+      //                })
+      //                .attr('style', 'pointer-events: none;')
+
+      // console.log(draw.svg())
+    </script>
+
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <rect id="background" width="32" height="64" stroke="hsl(113, 39%, 63%)" stroke-width="1" fill="white" rx="4" ry="4" x="1" y="1"></rect>
+      <rect id="button-zoom-in" width="30" height="30" fill="transparent" stroke-width="0" x="2" y="2" class="worldmap-buttons__button"></rect>
+      <rect id="button-zoom-out" width="30" height="30" fill="transparent" stroke-width="0" x="2" y="34" class="worldmap-buttons__button"></rect>
+      <line x1="1" y1="33" x2="33" y2="33" stroke="hsl(113, 39%, 63%)" stroke-width="1"></line>
+      <path d="M10 17 L24 17 M17 9 L17 25" stroke="hsl(113, 39%, 63%)" stroke-width="4" style="pointer-events: none;"></path>
+      <path d="M10 48 L24 48" stroke="hsl(113, 39%, 63%)" stroke-width="4" style="pointer-events: none;"></path>
+    </svg>
+  </body>
+</html>
