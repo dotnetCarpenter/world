@@ -1,32 +1,59 @@
 "use strict"
 
 !(function(doc, win) {
-  var world = SVG("worldmap")
+  var world = SVG('worldmap')
 
   main()
 
   function main() {
     // initiate
     world.panZoom({ zoomFactor: 0.4 })
+
     var ORIG_ZOOM = world.zoom()
+    var zoomLevel = ORIG_ZOOM
+    var container = SVG.adopt($('.worldmap'))
+    var buttonGroup = SVG('worldmap__buttongroup')
+    var zoomIn = buttonGroup.select('#button-zoom-in')
+    var zoomOut = buttonGroup.select('#button-zoom-out')
 
     // event handlers
     world.on('panStart', function() {
-      world.addClass('worldmap_dragging')
+      container.addClass('worldmap_dragging')
     })
 
-    world.on('panEnd', function() {
-      world.removeClass('worldmap_dragging')
+    world.on('panEnd', function(ev) {
+      container.removeClass('worldmap_dragging')
     })
 
     world.on('zoom', function maxMin(ev) {
+      zoomLevel = world.zoom()
+
       // max/min zoom
       var lvl = ev.detail.level
-      var zoom = world.zoom()
-      var zoomingIn = zoom < lvl
+      var zoomingIn = zoomLevel < lvl
 
-      if(zoomingIn && zoom > 7) ev.preventDefault()
-      else if(!zoomingIn && zoom < ORIG_ZOOM) ev.preventDefault()
+      if(zoomingIn && zoomLevel > 7) ev.preventDefault()
+      else if(!zoomingIn && zoomLevel < ORIG_ZOOM) ev.preventDefault()
+    })
+
+    zoomIn.on('click', function() {
+      buttonGroup
+          .select('.worldmap__plus')
+          .animate(110, '<')
+          .scale(1.4)
+          .animate(110, '>')
+          .scale(1)
+      world.animate(200, ">").zoom(zoomLevel * 1.6)
+    })
+
+    zoomOut.on('click', function() {
+      buttonGroup
+          .select('.worldmap__minus')
+          .animate(110, '<')
+          .scale(1.4)
+          .animate(110, '>')
+          .scale(1)
+      world.animate(200, ">").zoom(zoomLevel * .4)
     })
 
     world.on('click', function(ev) {
@@ -38,27 +65,13 @@
       this.select('path').removeClass(className)
       target.addClass(className)
     })
-
-   // create buttons
-  //  var zoomIn = drawButton(world)
-   //var zoomOut = zoomIn.clone()
   }
 
-  // function drawButton(world) {
-  //   var bg = world.group()
-  //   var button = bg.rect()
-  //   var line = bg.line(0, "50%", button.width(), "50%")
-  //   line.fill({
-  //     width: 1, color: '#84c47b'
-  //   })
-  //   //line.addTo(button)
-
-  //   bg.addClass('worldmap__button')
-
-
-  //   return button
-  // }
-
+  function $(query, el) {
+    el = el || doc
+    var ret = el.querySelectorAll(query)
+    return ret.length > 1 ? ret : ret[0]
+  }
 
   function debounce(func, wait, immediate) {
     var timeout

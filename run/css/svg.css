@@ -6,29 +6,6 @@ Orange:	#f89c1c
 Blue:	#29aae2
 Red:	#de1b23*/
 
-.info-box {
-	display:none;
-	position: fixed;
-	top: 1em;
-	right: 1em;
-}
-
-.info-box__button-list {
-	padding: 0;
-
-	text-align: right;
-	list-style: none;
-}
-
-.info-box__button {
-	min-width: 8em;
-}
-
-
-#worldmap {
-	cursor: pointer;
-}
-
 .worldmap {
 	position: relative;
 	max-width: 80%;
@@ -37,11 +14,23 @@ Red:	#de1b23*/
 	border: 1px solid #84c47b;
 	border-radius: 5px;
 	/*border-radius: 50%;*/
+	cursor: pointer;
 }
 
 .worldmap_dragging {
 	cursor: all-scroll;
 }
+
+.worldmap__buttongroup {
+	position: absolute;
+	transform: translate(12%, 8%);
+
+	overflow: visible;
+}
+
+.worldmap__button {}
+
+.worldmap__map {}
 
 .worldmap__country {
 	fill: #c0e2ba;
@@ -58,58 +47,3 @@ Red:	#de1b23*/
 .worldmap__country_has-data:active, .worldmap__country_has-data-selected {
 	fill: #f89c1c;
 }
-
-.worldmap-buttongroup {
-	position: absolute;
-	transform: translate(12%, 8%);
-
-	overflow: visible;
-}
-
-.worldmap-buttongroup__button {
-
-}
-
-/*.worldmap-buttons {
-	display: block;
-	width: 32px;
-	height: 62px;
-
-	background-color: #fff;
-	border: 1px solid #84c47b;
-}
-
-.worldmap-buttons__seperator {
-	height: 1px;
-	margin: 0;
-
-	border: none;
-	background-color: #84c47b;
-}
-
-.worldmap-buttons__button {
-	position: relative;
-	height: 30px;
-	width: 30px;
-
-	cursor: pointer;
-}
-
-.worldmap-buttons__button_in::after,
-.worldmap-buttons__button_out::after {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-
-	color: #84c47b;
-	font-size: 30px;
-	font-weight: 900;
-
-	transform: translate(-50%, -50%);
-}
-.worldmap-buttons__button_in::after {
-	content: '+';
-}
-.worldmap-buttons__button_out::after {
-	content: '-';
-}*/

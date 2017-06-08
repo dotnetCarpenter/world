@@ -1,0 +1,16 @@
+.info-box {
+	position: fixed;
+	top: 1em;
+	right: 1em;
+}
+
+.info-box__button-list {
+	padding: 0;
+
+	text-align: right;
+	list-style: none;
+}
+
+.info-box__button {
+	min-width: 8em;
+}
