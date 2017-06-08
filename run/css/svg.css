@@ -26,7 +26,7 @@ Red:	#de1b23*/
 
 .worldmap {
 	max-width: 80%;
-	margin-left: 10%;
+	transform: translateX(5%);
 
 	border: 1px solid #84c47b;
 	border-radius: 5px;
@@ -53,6 +53,14 @@ Red:	#de1b23*/
 
 .worldmap__country_has-data:active, .worldmap__country_has-data-selected {
 	fill: #f89c1c;
+}
+
+.worldmap-buttongroup {
+	overflow: visible;
+}
+
+.worldmap-buttongroup__button {
+
 }
 
 /*.worldmap-buttons {

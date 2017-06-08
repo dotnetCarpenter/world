@@ -15,65 +15,82 @@
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.2/svg.js"></script>-->
     <script src="js/lib/svg.js"></script>
     <script>
-      // const green  = 'hsl(113, 39%, 63%)',
-      //       ph = 'hsla(198, 76%, 52%, .2)'
-      // let draw = SVG('drawing').size(100,100).viewbox(0,0,100,100)
+      const green  = 'hsl(113, 39%, 63%)',
+            ph = 'hsla(198, 76%, 52%, .2)'
+      let draw = SVG('drawing')
+                   .size(34,66)
+                   .viewbox(0, 0, 32, 66)
+                   .id('worldmap-buttongroup')
+                   .addClass('worldmap-buttongroup')
 
-      // let bg = draw.rect()
-      //              .stroke({
-      //                width: 1,
-      //                color: green
-      //              })
-      //              .fill('white')
-      //              .radius(4)
-      //              .size(32, 64)
-      //              .move(1,1)
-      //              .id('background')
+      let nested = draw.nested().move(10, 20)
 
-      // let b1 = draw.rect(30,30)
-      //              .fill('transparent')
-      //             //  .fill(ph)
-      //              .stroke({width: 0})
-      //              .move(2,2)
-      //              .id('button-zoom-in')
-      //              .addClass("worldmap-buttons__button")
+      let bg = draw.rect()
+                   .stroke({
+                     width: 1,
+                     color: green
+                   })
+                   .fill('white')
+                   .radius(4)
+                   .size(32, 64)
+                   .move(0,1)
 
-      // let b2 = b1.clone()
-      //            .move(2, b1.height() + 4)
-      //            .id('button-zoom-out')
+      let b1 = draw.rect(30,30)
+                   .fill('white')
+                  //  .fill(ph)
+                   .stroke({width: 0})
+                   .move(0,2)
+                   .id('button-zoom-in')
+                   .addClass("worldmap-buttons__button")
 
-      // let seperator = draw.line(1, bg.height()/2+1, bg.width()+1, bg.height()/2+1)
-      //                     .stroke({
-      //                       width: 1,
-      //                       color: green
-      //                     })
+      let b2 = b1.clone()
+                 .move(2, b1.height() + 4)
+                 .id('button-zoom-out')
 
-      // // let helper = draw.circle(1).move(5,16)
-      // let plus = draw.path('M10 17 L24 17 M17 9 L17 25')
-      //                .stroke({
-      //                  width: 4,
-      //                  color: green
-      //                })
-      //                .attr('style', 'pointer-events: none;')
+      let seperator = draw.line(0, bg.height()/2+1, bg.width(), bg.height()/2+1)
+                          .stroke({
+                            width: 1,
+                            color: green
+                          })
+
+      // let helper = draw.circle(1).move(5,16)
+      let plus = draw.path('M14.232,12.854l-0.035-2.408V7.512c0.65-0.139,1.419-0.209,2.304-0.209c0.884,0,1.652,0.07,2.304,0.209 v2.933l-0.034,2.408l2.373-0.035h2.758c0.162,0.745,0.243,1.496,0.243,2.251c0,0.756-0.081,1.46-0.243,2.112h-2.758l-2.373-0.035 l0.034,2.374v2.967c-0.651,0.14-1.42,0.209-2.304,0.209c-0.885,0-1.653-0.069-2.304-0.209v-2.967l0.035-2.374l-2.374,0.035H9.1 c-0.162-0.629-0.243-1.349-0.243-2.164c0-0.814,0.081-1.547,0.243-2.199h2.759L14.232,12.854z')
+                     .fill(green)
+                     .attr('style', 'pointer-events: none;')
+                     .move(8.5, 9)
 
 
-      // let minus = draw.path('M10 48 L24 48')
-      //                 .stroke({
-      //                  width: 4,
-      //                  color: green
-      //                })
-      //                .attr('style', 'pointer-events: none;')
+      let minus = draw.path('M21.422,48.182h-9.844C11.438,47.6,11.369,46.873,11.369,46s0.07-1.6,0.209-2.182h9.844 c0.141,0.582,0.209,1.309,0.209,2.182S21.562,47.6,21.422,48.182z')
+                      .fill(green)
+                      .attr('style', 'pointer-events: none;')
+                      .move(11, 46)
+      b1.on('click', () => {
+        plus
+          .animate(110, '<')
+          .scale(1.4)
+          .animate(110, '>')
+          .scale(1)
+      })
 
-      // console.log(draw.svg())
+      b2.on('click', () => {
+        minus
+          .animate(110, '<')
+          .scale(1.4)
+          .animate(110, '>')
+          .scale(1)
+      })
+
+      console.log(draw.svg())
     </script>
 
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
-      <rect id="background" width="32" height="64" stroke="hsl(113, 39%, 63%)" stroke-width="1" fill="white" rx="4" ry="4" x="1" y="1"></rect>
-      <rect id="button-zoom-in" width="30" height="30" fill="transparent" stroke-width="0" x="2" y="2" class="worldmap-buttons__button"></rect>
+    <svg id="worldmap-buttongroup" viewBox="0 0 32 66" class="worldmap-buttongroup" width="34" height="66" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <rect width="32" height="64" stroke="hsl(113, 39%, 63%)" stroke-width="1" fill="white" rx="4" ry="4" x="0" y="1"></rect>
+      <rect id="button-zoom-in" width="30" height="30" fill="transparent" stroke-width="0" x="0" y="2" class="worldmap-buttons__button"></rect>
       <rect id="button-zoom-out" width="30" height="30" fill="transparent" stroke-width="0" x="2" y="34" class="worldmap-buttons__button"></rect>
-      <line x1="1" y1="33" x2="33" y2="33" stroke="hsl(113, 39%, 63%)" stroke-width="1"></line>
-      <path d="M10 17 L24 17 M17 9 L17 25" stroke="hsl(113, 39%, 63%)" stroke-width="4" style="pointer-events: none;"></path>
-      <path d="M10 48 L24 48" stroke="hsl(113, 39%, 63%)" stroke-width="4" style="pointer-events: none;"></path>
+      <line x1="0" y1="33" x2="32" y2="33" stroke="hsl(113, 39%, 63%)" stroke-width="1"></line>
+      <path d="M13.87499964904785 14.55100002670288L13.83999964904785 12.14300002670288V9.209000026702881C14.489999649047851 9.07000002670288 15.258999649047851 9.000000026702882 16.14399964904785 9.000000026702882C17.02799964904785 9.000000026702882 17.79599964904785 9.070000026702882 18.447999649047848 9.209000026702881V12.142000026702881L18.41399964904785 14.55000002670288L20.78699964904785 14.51500002670288H23.54499964904785C23.706999649047848 15.26000002670288 23.787999649047848 16.01100002670288 23.787999649047848 16.76600002670288C23.787999649047848 17.52200002670288 23.706999649047848 18.22600002670288 23.54499964904785 18.87800002670288H20.78699964904785L18.41399964904785 18.843000026702878L18.447999649047848 21.217000026702877V24.184000026702876C17.796999649047848 24.324000026702876 17.02799964904785 24.393000026702875 16.14399964904785 24.393000026702875C15.25899964904785 24.393000026702875 14.490999649047849 24.324000026702876 13.839999649047849 24.184000026702876V21.217000026702877L13.874999649047849 18.843000026702878L11.500999649047849 18.87800002670288H8.742999649047851C8.58099964904785 18.249000026702877 8.49999964904785 17.529000026702878 8.49999964904785 16.714000026702877C8.49999964904785 15.900000026702878 8.58099964904785 15.167000026702878 8.742999649047851 14.515000026702879H11.501999649047852L13.87499964904785 14.55100002670288Z" fill="hsl(113, 39%, 63%)" style="pointer-events: none;"></path>
+      <path d="M21.052999565124512 50.36399920654297H11.208999565124513C11.068999565124512 49.78199920654297 10.999999565124511 49.054999206542966 10.999999565124511 48.18199920654297S11.069999565124512 46.58199920654297 11.208999565124511 45.99999920654297H21.05299956512451C21.193999565124507 46.58199920654297 21.26199956512451 47.308999206542964 21.26199956512451 48.18199920654297S21.192999565124513 49.78199920654297 21.052999565124512 50.36399920654297Z" fill="hsl(113, 39%, 63%)" style="pointer-events: none;"></path>
     </svg>
+
   </body>
 </html>
