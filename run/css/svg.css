@@ -1,49 +1,10 @@
 @charset "UTF-8";
-/* CSS Document */
 
-/* Responsive SVG */
-
-/*.svg-container
-{
-	width: 100%;
-    height: 0;
-    padding-top: 48%;
-    position: relative;
-	padding-bottom:100px;
-}
-
-.svg-content
-{
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.svg-type-container
-{
-	width: 100%;
-    height: 0;
-    padding-top: 48%;
-    position: relative;
-	padding-bottom:100px;
-}
-
-.svg-type-content
-{
-	border-radius: 10px;
-	box-sizing:border-box;
-	-moz-box-sizing:border-box;
-}
-
-.svg-type-content:hover
-{
-	border: 3px solid #337ab7;
-	box-sizing:content-box;
-	-moz-box-sizing:content-box;
-
-	cursor:pointer;
-	border-radius: 10px;
-}*/
+/*Colors
+Green:	#84c47b
+Orange:	#f89c1c
+Blue:	#29aae2
+Red:	#de1b23*/
 
 .info-box {
 	display:none;
@@ -69,6 +30,7 @@
 
 	border: 1px solid #84c47b;
 	border-radius: 5px;
+	/*border-radius: 50%;*/
 
 	cursor: pointer;
 }
@@ -90,10 +52,10 @@
 }
 
 .worldmap__country_has-data:active, .worldmap__country_has-data-selected {
-	fill: #29AAE2;
+	fill: #f89c1c;
 }
 
-.worldmap-buttons {
+/*.worldmap-buttons {
 	display: block;
 	width: 32px;
 	height: 62px;
@@ -135,4 +97,4 @@
 }
 .worldmap-buttons__button_out::after {
 	content: '-';
-}
+}*/
