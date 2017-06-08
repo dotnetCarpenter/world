@@ -24,15 +24,19 @@ Red:	#de1b23*/
 	min-width: 8em;
 }
 
+
+#worldmap {
+	cursor: pointer;
+}
+
 .worldmap {
+	position: relative;
 	max-width: 80%;
 	transform: translateX(5%);
 
 	border: 1px solid #84c47b;
 	border-radius: 5px;
 	/*border-radius: 50%;*/
-
-	cursor: pointer;
 }
 
 .worldmap_dragging {
@@ -56,6 +60,9 @@ Red:	#de1b23*/
 }
 
 .worldmap-buttongroup {
+	position: absolute;
+	transform: translate(12%, 8%);
+
 	overflow: visible;
 }
 
