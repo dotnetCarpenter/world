@@ -1,6 +1,7 @@
 "use strict"
 
 !(function(doc) {
+  $('.info-box').style.display = 'block'
   var world = SVG("worldmap")
   var controls = [$(".info-box__button_in"), $(".info-box__button_out"), $('.info-box__button_default')]
   var displays = $(".info-box__zoom-factor")

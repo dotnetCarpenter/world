@@ -18,30 +18,13 @@
     }
   </style>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.2/svg.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.2/svg.js" defer></script>
   <script src="js/lib/svg.panzoom.js" defer></script>
   <script src="js/app.js" defer></script>
   <!--<script src="js/dev.js" defer></script>-->
 </head>
 
 <body>
-
-  <!--<section class="info-box">
-    <form>
-      <fieldset>
-        <legend>tools</legend>
-        <div>
-          <p>Current zoom level: <b class="info-box__zoom-factor"></b></p>
-          <p>Original zoom level: <b class="info-box__zoom-factor"></b></p>
-          <ul class="info-box__button-list">
-            <li><input type="button" value="zoom in" class="info-box__button info-box__button_in"></li>
-            <li><input type="button" value="zoom out" class="info-box__button info-box__button_out"></li>
-            <li><input type="button" value="zoom to 1" class="info-box__button info-box__button_default"></li>
-          </ul>
-        </div>
-      </fieldset>
-    </form>
-  </section>-->
 
   <h1>World map example</h1>
 
@@ -592,6 +575,23 @@
     </svg>
 
   <!--</section>-->
+
+  <section class="info-box">
+    <form>
+      <fieldset>
+        <legend>tools</legend>
+        <div>
+          <p>Current zoom level: <b class="info-box__zoom-factor"></b></p>
+          <p>Original zoom level: <b class="info-box__zoom-factor"></b></p>
+          <ul class="info-box__button-list">
+            <li><input type="button" value="zoom in" class="info-box__button info-box__button_in"></li>
+            <li><input type="button" value="zoom out" class="info-box__button info-box__button_out"></li>
+            <li><input type="button" value="zoom to 1" class="info-box__button info-box__button_default"></li>
+          </ul>
+        </div>
+      </fieldset>
+    </form>
+  </section>
 
 </body>
 </html>
