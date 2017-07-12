@@ -7,10 +7,10 @@
 
   function main() {
     // initiate
-    world.panZoom({ zoomFactor: 0.4 })
+    world.panZoom({ zoomFactor: 0.4, zoomMax: 7 })
+    world.zoomMin = world.zoom()
 
-    var ORIG_ZOOM = world.zoom()
-    var zoomLevel = ORIG_ZOOM
+    // var zoomLevel = ORIG_ZOOM
     var container = SVG.adopt($('.worldmap'))
     var buttonGroup = SVG('worldmap__buttongroup')
     var zoomIn = buttonGroup.select('#button-zoom-in')
@@ -25,16 +25,16 @@
       container.removeClass('worldmap_dragging')
     })
 
-    world.on('zoom', function maxMin(ev) {
-      zoomLevel = world.zoom()
+    // world.on('zoom', function maxMin(ev) {
+    //   zoomLevel = world.zoom()
 
-      // max/min zoom
-      var lvl = ev.detail.level
-      var zoomingIn = zoomLevel < lvl
+    //   // max/min zoom
+    //   var lvl = ev.detail.level
+    //   var zoomingIn = zoomLevel < lvl
 
-      if(zoomingIn && zoomLevel > 7) ev.preventDefault()
-      else if(!zoomingIn && zoomLevel < ORIG_ZOOM) ev.preventDefault()
-    })
+    //   if(zoomingIn && zoomLevel > 7) ev.preventDefault()
+    //   else if(!zoomingIn && zoomLevel < ORIG_ZOOM) ev.preventDefault()
+    // })
 
     zoomIn.on('click', function() {
       buttonGroup
@@ -43,6 +43,7 @@
           .scale(1.4)
           .animate(110, '>')
           .scale(1)
+
       world.animate(200, ">").zoom(zoomLevel * 1.6)
     })
 
@@ -53,6 +54,7 @@
           .scale(1.4)
           .animate(110, '>')
           .scale(1)
+
       world.animate(200, ">").zoom(zoomLevel * .4)
     })
 
