@@ -1,6 +1,6 @@
 /*!
 * svg.panzoom.js - A plugin for svg.js that enables panzoom for viewport elements
-* @version 1.0.0
+* @version 1.0.1
 * https://github.com/svgdotjs/svg.panzoom.js#readme
 *
 * @copyright Ulrich-Matthias Schäfer
@@ -22,6 +22,14 @@ SVG.extend(SVG.Doc, SVG.Nested, {
   panZoom: function(options) {
     options = options || {}
     var zoomFactor = options.zoomFactor || 0.03
+
+    var zoomMin = options.zoomMin || 0
+
+    var zoomMax = options.zoomMax || Number.MAX_VALUE
+
+    this.zoomMin = zoomMin;
+
+    this.zoomMax = zoomMax;
 
     var lastP, lastTouches, zoomInProgress = false
 
@@ -100,10 +108,11 @@ SVG.extend(SVG.Doc, SVG.Nested, {
           .translate(-focusP.x, -focusP.y)
       )
 
-      if(this.fire('zoom', {box: box, focus: focusP, level: currentDelta}).event().defaultPrevented)
-        this.viewbox(box)
+      this.viewbox(box)
 
       lastTouches = currentTouches
+
+      this.fire('zoom', {box: box, focus: focusP})
     }
 
     var panStart = function(ev) {
@@ -119,8 +128,8 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
       lastP = {x: lastTouches[0].clientX, y: lastTouches[0].clientY }
 
-      SVG.on(document, 'mousemove', panning, this, {passive:false})
-      SVG.on(document, 'mouseup', panStop, this, {passive:false})
+      SVG.on(document, 'mousemove', panning, this)
+      SVG.on(document, 'mouseup', panStop, this)
     }
 
     var panStop = function(ev) {
@@ -153,9 +162,12 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     this.on('mousedown', panStart, this)
 
     return this
+
   },
 
   zoom: function(level, point) {
+
+
     var style = window.getComputedStyle(this.node)
       , width = parseFloat(style.getPropertyValue('width'))
       , height = parseFloat(style.getPropertyValue('height'))
@@ -167,7 +179,12 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     if(level == null) {
       return zoom
     }
-
+    if(level >= this.zoomMax) {
+      level = this.zoomMax
+    }
+    if(level <= this.zoomMin) {
+      level = this.zoomMin
+    }
     var zoomAmount = (zoom / level)
 
     point = point || new SVG.Point(width/2 / zoomX + v.x, height/2 / zoomY + v.y)
@@ -177,7 +194,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
         .scale(zoomAmount, point.x, point.y)
       )
 
-    if(this.fire('zoom', {box: box, focus: point, level: level}).event().defaultPrevented)
+    if(this.fire('zoom', {box: box, focus: point}).event().defaultPrevented)
       return this
 
     return this.viewbox(box)
@@ -189,5 +206,4 @@ SVG.extend(SVG.FX, {
     return this.add('zoom', new SVG.Number(level), point)
   }
 })
-
 }());
