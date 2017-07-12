@@ -38,6 +38,8 @@ Red:	#de1b23*/
 	stroke: white;
 	stroke-opacity: 1;
 	stroke-width: 0.5;
+
+	transition: fill 300ms;
 }
 
 .worldmap__country_has-data {
