@@ -6,7 +6,7 @@
 * @copyright Wout Fierens <wout@mick-wout.com>
 * @license MIT
 *
-* BUILT: Mon Jun 05 2017 11:33:23 GMT+0200 (Mitteleuropäische Sommerzeit)
+* BUILT: Thu Jul 13 2017 19:13:14 GMT+0200 (CEST)
 */;
 (function(root, factory) {
   /* istanbul ignore next */
@@ -2038,6 +2038,8 @@ SVG.MorphObj = SVG.invent({
   create: function(from, to){
     // prepare color for morphing
     if(SVG.Color.isColor(to)) return new SVG.Color(from).morph(to)
+    // prepare value list for morphing
+    if(SVG.regex.delimiter.test(from)) return new SVG.Array(from).morph(to)
     // prepare number for morphing
     if(SVG.regex.numberAndUnit.test(to)) return new SVG.Number(from).morph(to)
 
@@ -4011,7 +4013,7 @@ SVG.Doc = SVG.invent({
     }
     // Fix for possible sub-pixel offset. See:
     // https://bugzilla.mozilla.org/show_bug.cgi?id=608812
-  , spof: function(spof) {
+  , spof: function() {
       var pos = this.node.getScreenCTM()
 
       if (pos)
@@ -5546,4 +5548,4 @@ if (typeof window.CustomEvent !== 'function') {
 
 return SVG
 
-}));
+}));
