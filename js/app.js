@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 !(function(doc, win) {
   var world = SVG('worldmap')
@@ -42,6 +42,16 @@
       // else if(!zoomingIn && zoomLevel < ORIG_ZOOM) ev.preventDefault()
     })
 
+    world.on('dblclick', function zoomIn(ev) {
+      ev.preventDefault()
+
+      var factor
+      if(ev.shiftKey) factor = .4
+      else factor = 1.6
+
+      world.animate(200, '>').zoom(zoomLevel * factor, {x:ev.clientX, y:ev.clientY}/* , new SVG.Point(ev.clientX, ev.clientY) */)
+    })
+
     zoomIn.on('click', function() {
       buttonGroup
           .select('.worldmap__plus')
@@ -50,7 +60,7 @@
           .animate(110, '>')
           .scale(1)
 
-      world.animate(200, ">").zoom(zoomLevel * 1.6)
+      world.animate(200, '>').zoom(zoomLevel * 1.6)
     })
 
     zoomOut.on('click', function() {
@@ -61,7 +71,7 @@
           .animate(110, '>')
           .scale(1)
 
-      world.animate(200, ">").zoom(zoomLevel * .4)
+      world.animate(200, '>').zoom(zoomLevel * .4)
     })
 
     world.on('click', function(ev) {
