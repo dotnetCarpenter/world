@@ -14,7 +14,7 @@
     setTimeout(function() { // wait for CSS styles to be applied to SVG or getComputedStyle might be wrong
       zoomLevel = world.zoom()
       world.panZoom({ zoomFactor: 0.4, zoomMax: 7 , zoomMin: zoomLevel  })
-      if(Number.isNaN(zoomLevel) || zoomLevel === Infinity) alert(zoomLevel)
+      if(Number.isNaN(zoomLevel) || zoomLevel == Infinity) alert(zoomLevel)
     }, 0)
 
     var container = SVG.adopt($('.worldmap'))

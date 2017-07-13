@@ -27,9 +27,6 @@ function guard(f, guard, context) {
 
 SVG.extend(SVG.Doc, SVG.Nested, {
 
-  /**
-   * @
-   */
   panZoom: function(options) {
     options = options || {}
 
@@ -40,6 +37,14 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     if(options.zoomMin || options.zoomMax) this.zoom = guard(this.zoom, zoomGuard, this)
 
     var zoomFactor = options.zoomFactor || 0.03
+
+    var zoomMin = options.zoomMin || 0
+
+    var zoomMax = options.zoomMax || Number.MAX_VALUE
+
+    this.zoomMin = zoomMin;
+
+    this.zoomMax = zoomMax;
 
     var lastP, lastTouches, zoomInProgress = false
 
@@ -186,9 +191,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
     }
 
   },
-  /**
-   *
-   */
+
   zoom: function(level, point) {
 
     var style = window.getComputedStyle(this.node)
