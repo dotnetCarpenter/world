@@ -3,14 +3,20 @@
 !(function(doc, win) {
   var world = SVG('worldmap')
 
+  // world.zoomMax = 3
+  // setTimeout(world.zoom.bind(world), 0, 0.01)
+
   main()
 
   function main() {
-    // initiate
-    world.panZoom({ zoomFactor: 0.4, zoomMax: 7 })
-    world.zoomMin = world.zoom()
+    // initialize
+    var zoomLevel
+    setTimeout(function() { // wait for CSS styles to be applied to SVG or getComputedStyle might be wrong
+      zoomLevel = world.zoom()
+      world.panZoom({ zoomFactor: 0.4, zoomMax: 7 , zoomMin: zoomLevel  })
+      if(Number.isNaN(zoomLevel) || zoomLevel === Infinity) alert(zoomLevel)
+    }, 0)
 
-    // var zoomLevel = ORIG_ZOOM
     var container = SVG.adopt($('.worldmap'))
     var buttonGroup = SVG('worldmap__buttongroup')
     var zoomIn = buttonGroup.select('#button-zoom-in')
@@ -25,16 +31,16 @@
       container.removeClass('worldmap_dragging')
     })
 
-    // world.on('zoom', function maxMin(ev) {
-    //   zoomLevel = world.zoom()
+    world.on('zoom', function maxMin(ev) {
+      zoomLevel = world.zoom()
 
-    //   // max/min zoom
-    //   var lvl = ev.detail.level
-    //   var zoomingIn = zoomLevel < lvl
+      // max/min zoom
+      // var lvl = ev.detail.level
+      // var zoomingIn = zoomLevel < lvl
 
-    //   if(zoomingIn && zoomLevel > 7) ev.preventDefault()
-    //   else if(!zoomingIn && zoomLevel < ORIG_ZOOM) ev.preventDefault()
-    // })
+      // if(zoomingIn && zoomLevel > 7) ev.preventDefault()
+      // else if(!zoomingIn && zoomLevel < ORIG_ZOOM) ev.preventDefault()
+    })
 
     zoomIn.on('click', function() {
       buttonGroup
@@ -62,7 +68,7 @@
       var target = SVG.adopt(ev.target)
       var className = 'worldmap__country_has-data-selected'
 
-      if(!target.hasClass('worldmap__country')) return
+      if(!target.hasClass('worldmap__country_has-data')) return
 
       this.select('path').removeClass(className)
       target.addClass(className)
