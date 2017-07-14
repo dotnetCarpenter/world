@@ -49,7 +49,7 @@
       if(ev.shiftKey) factor = .4
       else factor = 1.6
 
-      world.animate(200, '>').zoom(zoomLevel * factor, {x:ev.clientX, y:ev.clientY}/* , new SVG.Point(ev.clientX, ev.clientY) */)
+      world.animate(200, '>').zoom(zoomLevel * factor, world.point(ev.clientX, ev.clientY) /* {x:ev.clientX, y:ev.clientY} *//* , new SVG.Point(ev.clientX, ev.clientY) */)
     })
 
     zoomIn.on('click', function() {
