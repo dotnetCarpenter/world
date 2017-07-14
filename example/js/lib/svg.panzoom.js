@@ -17,6 +17,12 @@ var normalizeEvent = function(ev) {
   return ev.touches
 }
 
+var distance = function(a, b) {
+  return Math.sqrt(
+    Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2)
+  )
+}
+
 
 SVG.extend(SVG.Doc, SVG.Nested, {
 
@@ -88,14 +94,14 @@ SVG.extend(SVG.Doc, SVG.Nested, {
       var currentTouches = normalizeEvent(ev)
 
       // Distance Formula
-      var lastDelta = Math.sqrt(
-        Math.pow(lastTouches[0].clientX - lastTouches[1].clientX, 2) +
-        Math.pow(lastTouches[0].clientY - lastTouches[1].clientY, 2)
+      var lastDelta = distance(
+        {x: lastTouches[1].clientX, y: lastTouches[1].clientY },
+        {x: lastTouches[0].clientX, y: lastTouches[0].clientY }
       )
 
-      var currentDelta = Math.sqrt(
-        Math.pow(currentTouches[0].clientX - currentTouches[1].clientX, 2) +
-        Math.pow(currentTouches[0].clientY - currentTouches[1].clientY, 2)
+      var currentDelta = distance(
+        {x: currentTouches[1].clientX, y: currentTouches[1].clientY },
+        {x: currentTouches[0].clientX, y: currentTouches[0].clientY }
       )
 
       var zoomAmount = contraint(lastDelta/currentDelta)
