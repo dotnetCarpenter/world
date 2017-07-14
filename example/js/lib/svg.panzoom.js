@@ -17,6 +17,7 @@ var normalizeEvent = function(ev) {
   return ev.touches
 }
 
+
 SVG.extend(SVG.Doc, SVG.Nested, {
 
   panZoom: function(options) {
@@ -32,20 +33,24 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     var lastP, lastTouches, zoomInProgress = false
 
+    var contraint = function(lvl) {
+      if(lvl >= zoomMax) {
+        lvl = zoomMax
+      }
+      if(lvl <= zoomMin) {
+        lvl = zoomMin
+      }
+      return lvl
+    }
+
     var wheelZoom = function(ev) {
       ev.preventDefault()
 
       // touchpads can give ev.deltaY == 0, which skews the lvl calculation
       if(ev.deltaY == 0) return
 
-      var lvl = this.zoom() - zoomFactor * ev.deltaY/Math.abs(ev.deltaY)
+      var lvl = contraint(this.zoom() - zoomFactor * ev.deltaY/Math.abs(ev.deltaY))
         , p = this.point(ev.clientX, ev.clientY)
-
-      if(lvl > zoomMax)
-        lvl = zoomMax
-
-      if(lvl < zoomMin)
-        lvl = zoomMin
 
       this.zoom(lvl, p)
     }
@@ -81,7 +86,6 @@ SVG.extend(SVG.Doc, SVG.Nested, {
       ev.preventDefault()
 
       var currentTouches = normalizeEvent(ev)
-        , zoom = this.zoom()
 
       // Distance Formula
       var lastDelta = Math.sqrt(
@@ -94,13 +98,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
         Math.pow(currentTouches[0].clientY - currentTouches[1].clientY, 2)
       )
 
-      var zoomAmount = lastDelta/currentDelta
-
-      if(zoom * zoomAmount > zoomMax)
-        zoomAmount = zoomMax / zoom
-
-      if(zoom * zoomAmount < zoomMin)
-        zoomAmount = zoomMin / zoom
+      var zoomAmount = contraint(lastDelta/currentDelta)
 
       var currentFocus = {
         x: currentTouches[0].clientX + 0.5 * (currentTouches[1].clientX - currentTouches[0].clientX),
