@@ -10,11 +10,12 @@
 
   function main() {
     // initialize
-    var zoomLevel
+    var zoomLevel, zoomMax = 7, zoomMin
+
     setTimeout(function() { // wait for CSS styles to be applied to SVG or getComputedStyle might be wrong
-      zoomLevel = world.zoom()
-      world.panZoom({ zoomFactor: 0.4, zoomMax: 7 , zoomMin: zoomLevel  })
-      if(Number.isNaN(zoomLevel) || zoomLevel == Infinity) alert(zoomLevel)
+      zoomLevel = zoomMin = world.zoom()
+      world.panZoom({ zoomFactor: 0.4, zoomMax: zoomMax , zoomMin: zoomMin  })
+      if(Number.isNaN(zoomLevel) || zoomLevel == Infinity) alert('Something went wrong.\nzoomLevel: ' + zoomLevel)
     }, 0)
 
     var container = SVG.adopt($('.worldmap'))
@@ -33,13 +34,6 @@
 
     world.on('zoom', function maxMin(ev) {
       zoomLevel = world.zoom()
-
-      // max/min zoom
-      // var lvl = ev.detail.level
-      // var zoomingIn = zoomLevel < lvl
-
-      // if(zoomingIn && zoomLevel > 7) ev.preventDefault()
-      // else if(!zoomingIn && zoomLevel < ORIG_ZOOM) ev.preventDefault()
     })
 
     world.on('dblclick', function zoomIn(ev) {
@@ -49,7 +43,7 @@
       if(ev.shiftKey) factor = .4
       else factor = 1.6
 
-      world.animate(200, '>').zoom(zoomLevel * factor, world.point(ev.clientX, ev.clientY) /* {x:ev.clientX, y:ev.clientY} *//* , new SVG.Point(ev.clientX, ev.clientY) */)
+      world.animate(200, '>').zoom(zoomLevel * factor, world.point(ev.clientX, ev.clientY))
     })
 
     zoomIn.on('click', function() {
@@ -60,7 +54,8 @@
           .animate(110, '>')
           .scale(1)
 
-      world.animate(200, '>').zoom(zoomLevel * 1.6)
+      if(zoomLevel < zoomMax)
+        world.animate(200, '>').zoom(zoomLevel * 1.6)
     })
 
     zoomOut.on('click', function() {
@@ -71,7 +66,8 @@
           .animate(110, '>')
           .scale(1)
 
-      world.animate(200, '>').zoom(zoomLevel * .4)
+      if(zoomLevel > zoomMin)
+        world.animate(200, '>').zoom(zoomLevel * .4)
     })
 
     world.on('click', function(ev) {

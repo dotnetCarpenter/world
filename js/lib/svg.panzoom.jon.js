@@ -184,6 +184,13 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
   },
 
+  /**
+   * zoom
+   * NOTE: zoom will be moved to svg.js core in version 3.0
+   * @param {Number} level if undefined, zoom will return the current zoom level
+   * @param {SVG.Point} point
+   * @return {Number|this}
+   */
   zoom: function(level, point) {
 
     var style = window.getComputedStyle(this.node)
