@@ -43,6 +43,9 @@
       if(ev.shiftKey) factor = .4
       else factor = 1.6
 
+      if(!ev.shiftKey && zoomLevel > zoomMax) return
+      if( ev.shiftKey && zoomLevel < zoomMin) return
+
       world.animate(200, '>').zoom(zoomLevel * factor, world.point(ev.clientX, ev.clientY))
     })
 
@@ -87,7 +90,7 @@
     return ret.length > 1 ? ret : ret[0]
   }
 
-  function debounce(func, wait, immediate) {
+  /* function debounce(func, wait, immediate) {
     var timeout
     return function() {
       var context = this, args = arguments
@@ -100,6 +103,6 @@
       timeout = setTimeout(later, wait)
       if (callNow) func.apply(context, args)
     }
-  }
+  } */
 
 }(document, window))

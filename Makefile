@@ -3,7 +3,7 @@
 source_dir = bower_components/svg.panzoom.js/dist/
 
 source := $(wildcard $(source_dir)*)
-target := $(patsubst $(source_dir)%,js/lib/%,$(source))
+target := $(patsubst $(source_dir)%,example/js/lib/%,$(source))
 
 all: $(source_dir) $(target)
 .phony: clean debug
