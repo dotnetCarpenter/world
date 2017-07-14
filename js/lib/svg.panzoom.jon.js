@@ -32,19 +32,11 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
     this.zoomMin = options.zoomMin || Number.MIN_VALUE
     this.zoomMax = options.zoomMax || Number.MAX_VALUE
+    this.zoomFactor = options.zoomFactor || 0.03
 
     // if max/min is given then decorate zoom with zoomGuard
     if(options.zoomMin || options.zoomMax) this.zoom = guard(this.zoom, zoomGuard, this)
 
-    var zoomFactor = options.zoomFactor || 0.03
-
-    var zoomMin = options.zoomMin || 0
-
-    var zoomMax = options.zoomMax || Number.MAX_VALUE
-
-    this.zoomMin = zoomMin;
-
-    this.zoomMax = zoomMax;
 
     var lastP, lastTouches, zoomInProgress = false
 
@@ -71,7 +63,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
       if(ev.deltaY == 0) return
 
-      var level = this.zoom() - zoomFactor * ev.deltaY/Math.abs(ev.deltaY)
+      var level = this.zoom() - this.zoomFactor * ev.deltaY/Math.abs(ev.deltaY)
         , p = this.point(ev.clientX, ev.clientY)
 
       this.zoom(level, p)
@@ -225,8 +217,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
 SVG.extend(SVG.FX, {
   zoom: function(level, point) {
-    var lvl = new SVG.Number(level)
-    return this.add('zoom', point == null ? lvl : [lvl, point])
+    return this.add('zoom', [new SVG.Number(level)].concat(point || []))
   }
 })
 }());

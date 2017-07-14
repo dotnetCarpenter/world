@@ -205,8 +205,7 @@ SVG.extend(SVG.Doc, SVG.Nested, {
 
 SVG.extend(SVG.FX, {
   zoom: function(level, point) {
-    var lvl = new SVG.Number(level)
-    return this.add('zoom', point == null ? lvl : [lvl, point])
+    return this.add('zoom', [new SVG.Number(level)].concat(point || []))
   }
 })
 }());
