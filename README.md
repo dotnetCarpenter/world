@@ -1,7 +1,7 @@
 # world
 world map
 
-Example: dotnetcarpenter.github.io/world or http://worldmap.surge.sh/
+Example: https://dotnetcarpenter.github.io/world or http://worldmap.surge.sh/
 
 Repo: https://gitlab.com/cartouche/udvikling/world
 
